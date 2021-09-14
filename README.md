@@ -1,1 +1,1 @@
-# react_typescipt
+# react_typescript
