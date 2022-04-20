@@ -1,5 +1,133 @@
-
 body{
   font-family: 'Raleway', sans-serif;
-  background-color: #f1f1f1;
+  background-color: #fff;
+  margin: auto auto;
+  width: 1080px;
+}
+
+a{
+  text-decoration: none;
+  color: #5c5c5c;
+}
+
+a:hover{
+  color: #5c5c5c;
+}
+
+.h3-header-logo{
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.color-main{
+  color: #dd8896;
+}
+
+.color-white{
+  color: #fff;
+}
+
+.bg-color-main{
+  background-color: #dd8896 !important;
+}
+
+.p-2{
+  padding: 2rem;
+}
+
+.p-3{
+  padding: 3rem;
+}
+
+.ml-1{
+  margin-left: 1rem;
+}
+
+.mt-2{
+  margin-top: 2rem;
+}
+
+.mt-5{
+  margin-top: 5rem;
+}
+
+.header-link{
+  font-size: 20px;
+}
+
+.header-link a{
+  padding: .4rem 1.2rem;
+  border-radius: 6px;
+}
+
+.header-link a:hover{
+  color: #fff;
+  background-color: #dd8896;
+}
+
+.is-active{
+  background-color: #dd8896;
+  color: #fff;
+}
+
+.text-center{
+  text-align: center;
+}
+
+.section-home{
+  display: flex;
+  align-items: center;
+}
+
+.group-todo{
+  margin-top: 5rem;
+  width: 1080px;
+}
+
+.box-todo{
+  width: 100%;
+  transition: all .3s ease-in-out;
+}
+
+.box-todo:hover{
+  box-shadow: 5px 10px 18px #cacaca;
+}
+
+.font-weight-bold{
+  font-weight: bold;
+}
+
+.font-size-30{
+  font-size: 30px;
+}
+
+.font-size-25{
+  font-size: 25px;
+}
+
+.font-size-20{
+  font-size: 20px;
+}
+
+.section-addblog{
+  margin-top: 5rem;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.width-300{
+  width: 450px;
+}
+
+.input-custom{
+  background-color: #ececec;
+  border: none;
+  outline: none;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+}
+
+.pointer{
+  cursor: pointer;
 }

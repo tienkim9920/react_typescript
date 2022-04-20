@@ -1,13 +1,10 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import Home from './component/Home';
 import Header from './share/Header';
-import Footer from './share/Footer';
-import About from './component/About';
-import List from './component/List';
-import Create from './component/Create';
-import Detail from './component/Detail';
+import Home from './view/Home';
+import Detail from './view/Detail';
+import AddBlog from './view/AddBlog';
 
 function App() {
   return (
@@ -15,13 +12,10 @@ function App() {
       <BrowserRouter>
         <Header />
         <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/about" component={About} />
-          <Route path="/list" component={List} />
-          <Route path="/create" component={Create} />
-          <Route path="/detail/:id" component={Detail} />
+          <Route exact path='/' component={Home} />
+          <Route path='/blogs/:id' component={Detail} />
+          <Route path='/addblogs' component={AddBlog} />
         </Switch>
-        <Footer />
       </BrowserRouter> 
     </div>
   );
