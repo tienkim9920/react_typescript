@@ -15,6 +15,10 @@ function Detail(props: any) {
         console.log('Test');
     }
 
+    const handleUp = () => {
+        dispatch(increment());
+    }
+
     return (
         <div className="mt-2 p-3">
             <div className='font-weight-bold color-main font-size-25 mt-2'>Nguyen Kim Tien</div>
@@ -25,7 +29,7 @@ function Detail(props: any) {
             <button onClick={handlerTest}>TEST</button>
             <button onClick={handlerDown}>Down</button>
             <div>{ count }</div>
-            <button>Up</button>
+            <button onClick={handleUp}>Up</button>
         </div>
     );
 }
