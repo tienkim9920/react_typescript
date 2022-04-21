@@ -7,7 +7,7 @@ function Detail(props: any) {
     const count = useAppSelector((state: any) => state.counter.value);
     const dispatch = useAppDispatch();
 
-    const handleDown = () => {
+    const handlerDown = () => {
         dispatch(decrement());
     }
 
@@ -18,7 +18,7 @@ function Detail(props: any) {
             <div className='font-size-20 mt-2'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti ut sapiente harum, commodi sequi numquam officia, 
             voluptas enim alias explicabo quos. Facilis ut aspernatur minus voluptatem perspiciatis illo earum nam.</div>
 
-            <button onClick={handleDown}>Down</button>
+            <button onClick={handlerDown}>Down</button>
             <div>{ count }</div>
             <button>Up</button>
         </div>
