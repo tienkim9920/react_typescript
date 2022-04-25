@@ -1,15 +1,10 @@
 import React from 'react';
-import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { decrement, increment } from '../app/counter.redux';
+// import { useAppSelector, useAppDispatch } from '../app/hooks';
 
 function Detail(props: any) {
 
-    const count = useAppSelector((state: any) => state.counter.value);
-    const dispatch = useAppDispatch();
-
-    const handlerDown = () => {
-        dispatch(decrement());
-    }
+    // const count = useAppSelector((state: any) => state.counter.value);
+    // const dispatch = useAppDispatch();
 
     return (
         <div className="mt-2 p-3">
@@ -17,10 +12,6 @@ function Detail(props: any) {
             <div className='font-size-20 mt-2'>hello work</div>
             <div className='font-size-20 mt-2'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti ut sapiente harum, commodi sequi numquam officia, 
             voluptas enim alias explicabo quos. Facilis ut aspernatur minus voluptatem perspiciatis illo earum nam.</div>
-            
-            <button onClick={handlerDown}>Down</button>
-            <div>{ count }</div>
-            <button>Up</button>
         </div>
     );
 }

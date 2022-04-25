@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useAppDispatch } from '../app/hooks';
+import { addPosts } from '../app/post.redux';
 import { PostsMapping } from '../mapping/posts.mapping';
 import { PostModel } from '../model/posts.model';
-import { PostService } from '../service/posts.service';
 
 function AddBlog(props: any) {
+
+    const dispatch = useAppDispatch();
 
     const [title, setTitle] = useState<string>('');
     const [body, setBody] = useState<string>('');
@@ -14,7 +17,9 @@ function AddBlog(props: any) {
         postModel.title = title;
         postModel.body = body;
 
-        PostService.PostBlogs(PostsMapping.Map2Service(postModel)).subscribe(res => console.log(res));
+        dispatch(addPosts(PostsMapping.Map2Service(postModel)));
+        setTitle('');
+        setBody('');
     }
 
     return (

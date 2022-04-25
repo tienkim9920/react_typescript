@@ -13,8 +13,8 @@ function App() {
         <Header />
         <Switch>
           <Route exact path='/' component={Home} />
-          <Route path='/blogs/:id' component={Detail} />
-          <Route path='/addblogs' component={AddBlog} />
+          <Route path='/posts/:id' component={Detail} />
+          <Route path='/add' component={AddBlog} />
         </Switch>
       </BrowserRouter> 
     </div>
