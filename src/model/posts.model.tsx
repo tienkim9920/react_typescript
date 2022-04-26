@@ -1,5 +1,6 @@
 export class PostModel {
-    userId?: String; 
+    id?: String;
+    userId?: String;
     title?: String;
     body?: String;
 }

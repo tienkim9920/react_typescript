@@ -9,8 +9,20 @@ export const PostService = {
             .catch(err => handleError(err));
     },
 
-    PostBlogs: (request: IPostModel) => {
+    AddPosts: (request: IPostModel) => {
         return http.post('/posts', request)
+            .then(res => res)
+            .catch(err => handleError(err));
+    },
+
+    DetailPosts: (id: string) => {
+        return http.get(`/posts/${id}`)
+            .then(res => res)
+            .catch(err => handleError(err));
+    },
+
+    DeletePosts: (id: string) => {
+        return http.delete(`/posts/${id}`)
             .then(res => res)
             .catch(err => handleError(err));
     }

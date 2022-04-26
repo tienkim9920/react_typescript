@@ -24,7 +24,7 @@ function Home(props: any) {
             <div className="group-todo">
                 {posts && posts.map((item: PostModel, index: string) => (
                     <div className="box-todo p-3 mt-3" key={`${index}`}>
-                        <Link to={`/posts/${item.userId}`}>
+                        <Link to={`/posts/${item.id}`}>
                             <div className='font-weight-bold color-main font-size-25'>{item.title}</div>
                             <div className='font-size-20'>{item.body}</div>
                         </Link>
