@@ -1,8 +1,11 @@
 body{
   font-family: 'Raleway', sans-serif;
-  background-color: #fff;
-  margin: auto auto;
+  background-color: rgb(243, 243, 243);
+}
+
+.App{
   width: 1080px;
+  margin: auto auto;
 }
 
 a{
@@ -12,11 +15,6 @@ a{
 
 a:hover{
   color: #5c5c5c;
-}
-
-.h3-header-logo{
-  font-size: 40px;
-  font-weight: bold;
 }
 
 .color-main{
@@ -29,6 +27,10 @@ a:hover{
 
 .bg-color-main{
   background-color: #dd8896 !important;
+}
+
+.bg-color-gray-fade{
+  background-color: rgb(243, 243, 243);
 }
 
 .p-2{
@@ -51,6 +53,79 @@ a:hover{
   margin-top: 5rem;
 }
 
+.mt-6{
+  margin-top: 6rem;
+}
+
+.text-center{
+  text-align: center;
+}
+
+.font-weight-bold{
+  font-weight: bold;
+}
+
+.font-size-30{
+  font-size: 30px;
+}
+
+.font-size-25{
+  font-size: 25px;
+}
+
+.font-size-20{
+  font-size: 20px;
+}
+
+.width-300{
+  width: 450px;
+}
+
+.input-custom{
+  background-color: #fff;
+  border: none;
+  outline: none;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+.size-height-5{
+  height: 5px;
+}
+
+.size-height-10{
+  height: 10px;
+}
+
+.bg-white{
+  background-color: #fff;
+}
+
+.radius-5{
+  border-radius: 5px;
+}
+
+
+
+
+
+
+/* -------------------------------------- */
+
+
+
+
+
+.h3-header-logo{
+  font-size: 40px;
+  font-weight: bold;
+}
+
+
 .header-link{
   font-size: 20px;
 }
@@ -70,43 +145,8 @@ a:hover{
   color: #fff;
 }
 
-.text-center{
-  text-align: center;
-}
-
-.section-home{
-  display: flex;
-  align-items: center;
-}
-
-.group-todo{
-  margin-top: 5rem;
-  width: 1080px;
-}
-
-.box-todo{
-  width: 100%;
-  transition: all .3s ease-in-out;
-}
-
 .box-todo:hover{
   box-shadow: 5px 10px 18px #cacaca;
-}
-
-.font-weight-bold{
-  font-weight: bold;
-}
-
-.font-size-30{
-  font-size: 30px;
-}
-
-.font-size-25{
-  font-size: 25px;
-}
-
-.font-size-20{
-  font-size: 20px;
 }
 
 .section-addblog{
@@ -116,18 +156,62 @@ a:hover{
   justify-content: center;
 }
 
-.width-300{
-  width: 450px;
+.section-header{
+  width: 100%;
+  background-color: #fff;
 }
 
-.input-custom{
-  background-color: #ececec;
-  border: none;
-  outline: none;
-  padding: 1rem 1.5rem;
-  border-radius: 10px;
+.grid-todo{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
 }
 
-.pointer{
-  cursor: pointer;
+.item-todo-list{
+  height: 600px;
+}
+
+.section-home{
+  display: flex;
+  align-items: center;
+}
+
+.group-todo{
+  width: 1080px;
+}
+
+.box-todo{
+  width: 100%;
+  transition: all .3s ease-in-out;
+  background-color: #fff;
+}
+
+.line-crimson{
+  width: 100%;
+  height: 1px;
+  background-color: #dd8896;
+}
+
+.line-golden{
+  width: 100%;
+  height: 1px;
+  background-color: rgb(233, 233, 40);
+}
+
+.line-blue{
+  width: 100%;
+  height: 1px;
+  background-color: cornflowerblue;
+}
+
+.border-crimson{
+  border-left: 5px solid #dd8896;
+}
+
+.border-golden{
+  border-left: 5px solid #e9e928;
+}
+
+.border-blue{
+  border-left: 5px solid #6495ed;
 }

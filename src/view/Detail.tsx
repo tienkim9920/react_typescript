@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { addDetail, deletePosts } from '../app/post.redux';
@@ -15,7 +15,7 @@ function Detail(props: any) {
 
     const router = useHistory();
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const index = store.findIndex((el: PostModel) => el.id?.toString() === id);
         if (index !== -1) {
             setPost(store[index]);
@@ -40,9 +40,9 @@ function Detail(props: any) {
             <div className='font-weight-bold color-main font-size-25 mt-2'>{post.title}</div>
             <div className='font-size-20 mt-2'>{post.userId}</div>
             <div className='font-size-20 mt-2'>{post.body}</div>
-            <div className='mt-5 d-flex'>
-                <div className='bg-color-main text-center input-custom color-white pointer' onClick={handleDelete}>Delete</div>
-            </div>
+            {post && <div className='mt-5 d-flex'>
+                <div className='bg-color-main text-center color-white pointer input-custom' onClick={handleDelete}>Delete</div>
+            </div>}
         </div>
     );
 }
