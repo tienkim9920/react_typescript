@@ -4,66 +4,154 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 function Todo(props: any) {
 
-    const [todo, setTodo] = useState<any>(
-        [
-            { id: '1', title: 'Chạy bộ' },
-            { id: '2', title: 'Ăn cơm' },
-            { id: '3', title: 'Ca Hát' },
-        ]
-    )
+    const tasks = [
+        { id: '1', title: 'Chạy bộ' },
+        { id: '2', title: 'Ăn cơm' },
+        { id: '3', title: 'Ca Hát' },
+        { id: '4', title: 'Học bài' },
+        { id: '5', title: 'Nhảy dây' },
+        { id: '6', title: 'Học bài' },
+        { id: '7', title: 'Nhảy dây' },
+    ];
 
-    function handleOnDragEnd(result: any) {
+    const taskStatus = {
+        toDo: {
+            name: "To do",
+            items: tasks
+        },
+        inProgress: {
+            name: "In Progress",
+            items: []
+        },
+        done: {
+            name: "Done",
+            items: []
+        }
+    };
+
+    const [columns, setColumns] = useState(taskStatus);
+
+    const onDragEnd = (result: any, columns: any, setColumns: any) => {
         if (!result.destination) return;
-        const items = Array.from(todo);
-        const [reorderedItem] = items.splice(result.source.index, 1); // cut element position
-        items.splice(result.destination.index, 0, reorderedItem);
+        const { source, destination } = result;
 
-        setTodo(items);
+        if (source.droppableId !== destination.droppableId) {
+            const sourceColumn = columns[source.droppableId];
+            const destColumn = columns[destination.droppableId];
+            const sourceItems = [...sourceColumn.items];
+            const destItems = [...destColumn.items];
+            const [removed] = sourceItems.splice(source.index, 1);
+            destItems.splice(destination.index, 0, removed);
+            setColumns({
+                ...columns,
+                [source.droppableId]: {
+                    ...sourceColumn,
+                    items: sourceItems
+                },
+                [destination.droppableId]: {
+                    ...destColumn,
+                    items: destItems
+                }
+            });
+        } else {
+            const column = columns[source.droppableId];
+            const copiedItems = [...column.items];
+            const [removed] = copiedItems.splice(source.index, 1);
+            copiedItems.splice(destination.index, 0, removed);
+            setColumns({
+                ...columns,
+                [source.droppableId]: {
+                    ...column,
+                    items: copiedItems
+                }
+            });
+        }
+    };
+
+    function lineColor(columnId: string) {
+        switch (columnId) {
+            case 'toDo':
+                return <div className='line-crimson'></div>
+            case 'inProgress':
+                return <div className='line-golden'></div>
+            default:
+                return <div className='line-blue'></div>
+        }
+    }
+
+    function borderColor(columnId: string) {
+        switch (columnId) {
+            case 'toDo':
+                return 'border-crimson'
+            case 'inProgress':
+                return 'border-golden'
+            default:
+                return 'border-blue'
+        }
     }
 
     return (
-        <div className="section-todo">
-            <div className="grid-todo mt-6">
-                <div className="item-todo-list bg-white p-3">
-                    <div className='d-flex justify-content-between'>
-                        <div className='font-weight-bold font-size-20'>To Do</div>
-                        <i className='fa fa-plus-square color-main pointer font-size-30'></i>
-                    </div>
-                    <div className="size-height-10"></div>
-                    <div className='line-crimson'></div>
-                    <DragDropContext onDragEnd={handleOnDragEnd}>
-                        <Droppable droppableId="todo">
-                            {(provided) => (
-                                <div className='body-item-todo-list' {...provided.droppableProps} ref={provided.innerRef}>
-                                    {todo.map((item: any, index: any) => (
-                                        <Draggable key={item.id} draggableId={item.id} index={index}>
-                                            {(provided) => (
-                                                <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}
-                                                    className='mt-3 p-3 text-center radius-5 bg-color-gray-fade pointer border-crimson'>{item.title}</div>
-                                            )}
-                                        </Draggable>
-                                    ))}
+        <div>
+            <h1 className='mt-5 text-center font-weight-bold'>To Do List</h1>
+            <div className='section-todo'>
+                <div className='grid-todo mt-5'>
+                    <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
+                        {Object.entries(columns).map(([columnId, column]) => {
+                            return (
+                                <div className='item-todo-list bg-white p-3' key={columnId}>
+                                    <div className='d-flex justify-content-between'>
+                                        <div className='font-weight-bold font-size-20'>{column.name}</div>
+                                        {columnId === 'toDo' && <i className='fa fa-plus-square color-main pointer font-size-30'></i>}
+                                    </div>
+                                    <div className="size-height-10"></div>
+                                    {lineColor(columnId)}
+                                    <Droppable droppableId={columnId} key={columnId}>
+                                        {(provided, snapshot) => {
+                                            return (
+                                                <div
+                                                    {...provided.droppableProps}
+                                                    ref={provided.innerRef}
+                                                    className='body-item-todo-list'
+                                                >
+                                                    {column.items.map((item, index) => {
+                                                        return (
+                                                            <Draggable
+                                                                key={item.id}
+                                                                draggableId={item.id}
+                                                                index={index}
+                                                            >
+                                                                {(provided, snapshot) => {
+                                                                    return (
+                                                                        <div
+                                                                            ref={provided.innerRef}
+                                                                            {...provided.draggableProps}
+                                                                            {...provided.dragHandleProps}
+                                                                            style={{
+                                                                                userSelect: "none",
+                                                                                backgroundColor: snapshot.isDragging
+                                                                                  ? columnId === 'toDo' ? '#dd8896' : columnId === 'inProgress' ? '#2e8b57' : '#6495ed'
+                                                                                  : "",
+                                                                                color: snapshot.isDragging ? '#fff' : '',
+                                                                                ...provided.draggableProps.style
+                                                                            }}
+                                                                            className={`mt-3 p-3 text-center radius-5 bg-color-gray-fade pointer ${borderColor(columnId)}`}
+                                                                        >
+                                                                            {item.title}
+                                                                        </div>
+                                                                    );
+                                                                }}
+                                                            </Draggable>
+                                                        );
+                                                    })}
+                                                    {provided.placeholder}
+                                                </div>
+                                            );
+                                        }}
+                                    </Droppable>
                                 </div>
-                            )}
-                        </Droppable>
+                            );
+                        })}
                     </DragDropContext>
-
-                </div>
-                <div className="item-todo-list bg-white p-3">
-                    <div className='font-weight-bold font-size-20'>In Progress</div>
-                    <div className="size-height-10"></div>
-                    <div className='line-golden'></div>
-                    <div className='body-item-todo-list'>
-                        <div className='mt-3 p-3 text-center radius-5 bg-color-gray-fade pointer border-golden'>Học bài</div>
-                    </div>
-                </div>
-                <div className="item-todo-list bg-white p-3">
-                    <div className='font-weight-bold font-size-20'>Done</div>
-                    <div className="size-height-10"></div>
-                    <div className='line-blue'></div>
-                    <div className='body-item-todo-list'>
-                        <div className='mt-3 p-3 text-center radius-5 bg-color-gray-fade pointer border-blue'>Nhảy dây</div>
-                    </div>
                 </div>
             </div>
         </div>
