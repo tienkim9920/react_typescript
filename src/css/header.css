@@ -1,0 +1,28 @@
+.h3-header-logo {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.header-link {
+    font-size: 20px;
+}
+
+.header-link a {
+    padding: .4rem 1.2rem;
+    border-radius: 6px;
+}
+
+.header-link a:hover {
+    color: #fff;
+    background-color: #dd8896;
+}
+
+.is-active {
+    background-color: #dd8896;
+    color: #fff;
+}
+
+.section-header {
+    width: 100%;
+    background-color: #fff;
+}

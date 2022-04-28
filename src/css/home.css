@@ -1,0 +1,35 @@
+.box-todo {
+    width: 100%;
+    transition: all .3s ease-in-out;
+    background-color: #fff;
+}
+
+.box-todo:hover {
+    box-shadow: 5px 10px 18px #cacaca;
+}
+
+.section-addblog {
+    margin-top: 5rem;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.grid-todo {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+}
+
+.item-todo-list {
+    height: 600px;
+}
+
+.section-home {
+    display: flex;
+    align-items: center;
+}
+
+.group-todo {
+    width: 1080px;
+}
