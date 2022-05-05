@@ -1,28 +1,27 @@
-import axios from "axios";
-import { IPostModel } from "../interface/posts.interface";
+import { IBlogModel } from "../interface/blogs.interface";
 import http from "./http.service";
 
-export const PostService = {
-    GetPosts: () => {
-        return http.get('/posts')
+export const BlogService = {
+    GetBlogs: () => {
+        return http.get('/blogs')
             .then(res => res)
             .catch(err => handleError(err));
     },
 
-    AddPosts: (request: IPostModel) => {
-        return http.post('/posts', request)
+    AddBlogs: (request: IBlogModel) => {
+        return http.post('/blogs', request)
             .then(res => res)
             .catch(err => handleError(err));
     },
 
-    DetailPosts: (id: string) => {
-        return http.get(`/posts/${id}`)
+    DetailBlogs: (id: string) => {
+        return http.get(`/blogs/${id}`)
             .then(res => res)
             .catch(err => handleError(err));
     },
 
-    DeletePosts: (id: string) => {
-        return http.delete(`/posts/${id}`)
+    DeleteBlogs: (id: string) => {
+        return http.delete(`/blogs/${id}`)
             .then(res => res)
             .catch(err => handleError(err));
     }

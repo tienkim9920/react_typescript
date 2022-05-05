@@ -1,29 +1,30 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { addDetail, deletePosts } from '../app/post.redux';
-import { PostModel } from '../model/posts.model';
-import { PostService } from '../service/posts.service';
+import { addDetail, deleteBlogs, getDetailBlog } from '../app/blog.redux';
+import { BlogModel } from '../model/blogs.model';
+import { BlogService } from '../service/blogs.service';
 
 function Detail(props: any) {
 
     const { id } = useParams<any>();
-    const [post, setPost] = useState<PostModel>({});
+    const [blog, setBlog] = useState<BlogModel>({});
 
-    const { store } = useAppSelector(state => state.post);
+    // const getTest = useAppSelector(getDetailBlog());
+    const { blogs } = useAppSelector(state => state.blog);
     const dispatch = useAppDispatch();
 
     const router = useHistory();
 
     useLayoutEffect(() => {
-        const index = store.findIndex((el: PostModel) => el.id?.toString() === id);
+        const index = blogs.findIndex((el: BlogModel) => el._id?.toString() === id);
         if (index !== -1) {
-            setPost(store[index]);
+            setBlog(blogs[index]);
             return;
         }
         const fetchPost = async () => {
-            const res = (await PostService.DetailPosts(id)).data;
-            setPost(res);
+            const res = (await BlogService.DetailBlogs(id)).data;
+            setBlog(res);
             dispatch(addDetail(res));
         }
 
@@ -31,18 +32,19 @@ function Detail(props: any) {
     }, [])
 
     const handleDelete = () => {
-        dispatch(deletePosts(id));
+        dispatch(deleteBlogs(id));
         router.replace('/');
     }
 
     return (
         <div className="mt-2 p-3">
-            <div className='font-weight-bold color-main font-size-25 mt-2'>{post.title}</div>
-            <div className='font-size-20 mt-2'>{post.userId}</div>
-            <div className='font-size-20 mt-2'>{post.body}</div>
-            {post && <div className='mt-5 d-flex'>
+            <div className='font-weight-bold color-main font-size-25 mt-2'>{blog.title}</div>
+            <div className='font-size-20 mt-2'>{blog.username}</div>
+            <div className='font-size-20 mt-2'>{blog.body}</div>
+            <div className='font-size-20 mt-2'>{blog.phone}</div>
+            <div className='mt-5 d-flex'>
                 <div className='bg-color-main text-center color-white pointer input-custom' onClick={handleDelete}>Delete</div>
-            </div>}
+            </div>
         </div>
     );
 }

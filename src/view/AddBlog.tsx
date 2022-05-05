@@ -1,25 +1,30 @@
 import React, { useState } from 'react';
 import { useAppDispatch } from '../app/hooks';
-import { addPosts } from '../app/post.redux';
-import { PostsMapping } from '../mapping/posts.mapping';
-import { PostModel } from '../model/posts.model';
+import { addBlogs } from '../app/blog.redux';
+import { BlogsMapping } from '../mapping/blogs.mapping';
+import { BlogModel } from '../model/blogs.model';
 
 function AddBlog(props: any) {
 
     const dispatch = useAppDispatch();
 
     const [title, setTitle] = useState<string>('');
+    const [username, setUsername] = useState<string>('');
     const [body, setBody] = useState<string>('');
+    const [phone, setPhone] = useState<string>('');
 
     const handleAddBlogs = () => {
-        const postModel = new PostModel();
-        postModel.userId = Math.random().toString();
+        const postModel = new BlogModel();
         postModel.title = title;
+        postModel.username = username;
         postModel.body = body;
+        postModel.phone = phone;
 
-        dispatch(addPosts(PostsMapping.Map2Service(postModel)));
+        dispatch(addBlogs(BlogsMapping.Map2Service(postModel)));
         setTitle('');
+        setUsername('');
         setBody('');
+        setPhone('');
     }
 
     return (
@@ -30,7 +35,13 @@ function AddBlog(props: any) {
                     <input className='width-300 input-custom' type="text" placeholder='Enter Title' value={title} onChange={(e) => setTitle(e.target.value)} />
                 </div>
                 <div className='mt-5'>
+                    <input className='width-300 input-custom' type="text" placeholder='Enter Username' value={username} onChange={(e) => setUsername(e.target.value)} />
+                </div>
+                <div className='mt-5'>
                     <input className='width-300 input-custom' type="text" placeholder='Enter Body'  value={body} onChange={(e) => setBody(e.target.value)} />
+                </div>
+                <div className='mt-5'>
+                    <input className='width-300 input-custom' type="text" placeholder='Enter Phone'  value={phone} onChange={(e) => setPhone(e.target.value)} />
                 </div>
                 <div className='mt-5'>
                     <div className='width-300 bg-color-main text-center input-custom color-white pointer' onClick={handleAddBlogs}>Add Blogs</div>

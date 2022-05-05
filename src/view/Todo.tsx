@@ -111,6 +111,19 @@ function Todo(props: any) {
         }
     }
 
+    const deleteTodo = (columnId: any, column: any, index: any) => {
+        console.log(index);
+        const copiedItems = [...column.items];
+        copiedItems.splice(index, 1);
+        setColumns({
+            ...columns,
+            [columnId]: {
+                ...column,
+                items: copiedItems
+            }
+        });
+    }
+
     function lineColor(columnId: string) {
         switch (columnId) {
             case 'toDo':
@@ -151,7 +164,7 @@ function Todo(props: any) {
                                     {lineColor(columnId)}
                                     <div className='body-item-todo-list'>
                                         <div className={`${todo && columnId === 'toDo' ? 'mt-3 text-center radius-5 bg-color-gray-fade pointer border-crimson border-around-crimson todo-active' : 'todo-inactive'}`}>
-                                            { todo && columnId === 'toDo' && 
+                                            {todo && columnId === 'toDo' &&
                                                 <input ref={inputTodo} onKeyUp={modelTodo} defaultValue={textTodo} className='input-transparent text-center w-100 h-100' type="text" placeholder='What you need done?' />
                                             }
                                         </div>
@@ -187,9 +200,11 @@ function Todo(props: any) {
                                                                                     color: snapshot.isDragging ? '#fff' : '',
                                                                                     ...provided.draggableProps.style
                                                                                 }}
-                                                                                className={`mt-3 p-3 text-center radius-5 bg-color-gray-fade pointer ${borderColor(columnId)}`}
+                                                                                className={`mt-3 pt-3 text-center radius-5 bg-color-gray-fade pointer ${borderColor(columnId)}`}
                                                                             >
-                                                                                {item.title}
+                                                                                <div>{item.title}</div>
+                                                                                <div className='p-2' onClick={() => deleteTodo(columnId, column, index)}><i className={`fa fa-trash font-size-20 ${snapshot.isDragging ? 'color-white' : 'color-main'}`}></i></div>
+                                                                                
                                                                             </div>
                                                                         );
                                                                     }}
