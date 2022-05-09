@@ -16,9 +16,9 @@ export const getBlogs = createAsyncThunk('blogs/get', async () => {
   return (await BlogService.GetBlogs()).data;
 })
 
-export const addBlogs = createAsyncThunk('blogs/add', async (request: IBlogModel) => {
-  return (await BlogService.AddBlogs(request)).data;
-})
+// export const addBlogs = createAsyncThunk('blogs/add', async (request: IBlogModel) => {
+//   return (await BlogService.AddBlogs(request)).data;
+// })
 
 export const patchBlogs = createAsyncThunk('blogs/update', async (request: IBlogModel) => {
   await BlogService.PatchBlogs(request);
@@ -34,10 +34,10 @@ export const blogSlice = createSlice({
   name: 'blog',
   initialState,
   reducers: {
-    addDetail: (state, action: PayloadAction<BlogModel>) => {
-      // state.store = [
-      //   ...state.store, action.payload
-      // ]
+    addBlogs: (state, action: PayloadAction<BlogModel>) => {
+      state.blogs = [
+        action.payload, ...state.blogs
+      ]
     },
   },
   extraReducers: (builder) => {
@@ -45,9 +45,9 @@ export const blogSlice = createSlice({
       state.blogs = action.payload;
     });
 
-    builder.addCase(addBlogs.fulfilled, (state: any, action: any) => {
-      state.blogs = [action.payload, ...state.blogs];
-    });
+    // builder.addCase(addBlogs.fulfilled, (state: any, action: any) => {
+    //   state.blogs = [action.payload, ...state.blogs];
+    // });
 
     builder.addCase(patchBlogs.fulfilled, (state: any, action: any) => {
       const index = state.blogs.findIndex((el: BlogModel) => el._id === action.payload._id);
@@ -60,7 +60,7 @@ export const blogSlice = createSlice({
   },
 })
 
-export const { addDetail } = blogSlice.actions;
+export const { addBlogs } = blogSlice.actions;
 
 export const selectBlog = (state: RootState) => state.blog;
 

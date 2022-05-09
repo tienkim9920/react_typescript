@@ -14,7 +14,7 @@ a {
 }
 
 a:hover {
-    color: #5c5c5c;
+    color: #fff;
 }
 
 .color-main {
@@ -85,7 +85,7 @@ a:hover {
     background-color: #fff;
     border: none;
     outline: none;
-    padding: 1rem 1.5rem;
+    padding: .75rem 1.5rem;
     border-radius: 10px;
 }
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { addDetail, deleteBlogs, getDetailBlog } from '../app/blog.redux';
+import { deleteBlogs, getDetailBlog } from '../app/blog.redux';
 import { BlogModel } from '../model/blogs.model';
 import { BlogService } from '../service/blogs.service';
 
@@ -22,10 +22,10 @@ function Detail(props: any) {
             setBlog(blogs[index]);
             return;
         }
+        
         const fetchPost = async () => {
             const res = (await BlogService.DetailBlogs(id)).data;
             setBlog(res);
-            dispatch(addDetail(res));
         }
 
         fetchPost();

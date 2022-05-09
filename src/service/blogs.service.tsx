@@ -11,7 +11,7 @@ export const BlogService = {
     AddBlogs: (request: IBlogModel) => {
         return http.post('/blogs', request)
             .then(res => res)
-            .catch(err => handleError(err));
+            .catch(res => res)
     },
 
     PatchBlogs: (request: IBlogModel) => {
