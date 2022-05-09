@@ -8,6 +8,7 @@ export class BlogsMapping {
         }
 
         const result: IBlogModel = {
+            _id: model._id,
             title: model.title,
             username: model.username,
             body: model.body,

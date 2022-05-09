@@ -1,6 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { deleteBlogs, getBlogs, patchBlogs } from '../app/blog.redux';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import Modal from '../component/Modal.component';
+import { BlogsMapping } from '../mapping/blogs.mapping';
+import { BlogModel } from '../model/blogs.model';
 
 function Todo(props: any) {
 
@@ -18,17 +22,23 @@ function Todo(props: any) {
     const taskStatus = {
         toDo: {
             name: "To do",
-            items: tasks
+            body: 'todo',
+            items: [] as any
         },
         inProgress: {
             name: "In Progress",
-            items: []
+            body: 'inprogress',
+            items: [] as any
         },
         done: {
             name: "Done",
-            items: []
+            body: 'done',
+            items: [] as any
         }
     };
+
+    const { blogs } = useAppSelector(state => state.blog);
+    const dispatch = useAppDispatch();
 
     const [columns, setColumns] = useState(taskStatus);
 
@@ -40,13 +50,20 @@ function Todo(props: any) {
         if (!result.destination) return;
         const { source, destination } = result;
 
+        const sourceColumn = columns[source.droppableId];
+        const destColumn = columns[destination.droppableId];
+
         if (source.droppableId !== destination.droppableId) {
-            const sourceColumn = columns[source.droppableId];
-            const destColumn = columns[destination.droppableId];
             const sourceItems = [...sourceColumn.items];
             const destItems = [...destColumn.items];
             const [removed] = sourceItems.splice(source.index, 1); // cut and get
             destItems.splice(destination.index, 0, removed);
+
+            const blogModel = new BlogModel();
+            blogModel._id = removed._id;
+            blogModel.body = destColumn.body;
+            dispatch(patchBlogs(BlogsMapping.Map2Service(blogModel)));
+
             setColumns({
                 ...columns,
                 [source.droppableId]: {
@@ -59,14 +76,13 @@ function Todo(props: any) {
                 }
             });
         } else {
-            const column = columns[source.droppableId];
-            const copiedItems = [...column.items];
+            const copiedItems = [...sourceColumn.items];
             const [removed] = copiedItems.splice(source.index, 1);
             copiedItems.splice(destination.index, 0, removed);
             setColumns({
                 ...columns,
                 [source.droppableId]: {
-                    ...column,
+                    ...sourceColumn,
                     items: copiedItems
                 }
             });
@@ -74,19 +90,8 @@ function Todo(props: any) {
     };
 
     const addTodo = () => {
-        console.log(textTodo)
         setTodo(true);
     }
-
-    useEffect(() => {
-        if (todo) {
-            inputTodo.current!.focus();
-            document.addEventListener('click', handleClickOutside, true);
-            return () => {
-                document.removeEventListener('click', handleClickOutside, true);
-            };
-        }
-    }, [todo])
 
     const handleClickOutside = (event: any) => {
         if (inputTodo.current && !inputTodo.current.contains(event.target)) {
@@ -112,8 +117,8 @@ function Todo(props: any) {
     }
 
     const deleteTodo = (columnId: any, column: any, index: any) => {
-        console.log(index);
         const copiedItems = [...column.items];
+        dispatch(deleteBlogs(copiedItems[index]._id));
         copiedItems.splice(index, 1);
         setColumns({
             ...columns,
@@ -123,6 +128,42 @@ function Todo(props: any) {
             }
         });
     }
+
+    useEffect(() => {
+        if (todo) {
+            inputTodo.current!.focus();
+            document.addEventListener('click', handleClickOutside, true);
+            return () => {
+                document.removeEventListener('click', handleClickOutside, true);
+            };
+        }
+    }, [todo])
+
+    useEffect(() => {
+        if (!blogs.length){
+            dispatch(getBlogs());
+        }
+
+        const taskStatus = {
+            toDo: {
+                name: "To do",
+                body: 'todo',
+                items: blogs.filter((item: BlogModel) => item.body === 'todo') as any
+            },
+            inProgress: {
+                name: "In Progress",
+                body: 'inprogress',
+                items: blogs.filter((item: BlogModel) => item.body === 'inprogress') as any
+            },
+            done: {
+                name: "Done",
+                body: 'done',
+                items: blogs.filter((item: BlogModel) => item.body === 'done') as any
+            }
+        };
+        
+        setColumns(taskStatus);
+    }, [blogs])
 
     function lineColor(columnId: string) {
         switch (columnId) {
@@ -179,11 +220,11 @@ function Todo(props: any) {
                                                             height: '500px',
                                                         }}
                                                     >
-                                                        {column.items.map((item, index) => {
+                                                        {column.items.map((item: any, index: any) => {
                                                             return (
                                                                 <Draggable
-                                                                    key={item.id}
-                                                                    draggableId={item.id}
+                                                                    key={item._id}
+                                                                    draggableId={item._id}
                                                                     index={index}
                                                                 >
                                                                     {(provided, snapshot) => {

@@ -14,6 +14,12 @@ export const BlogService = {
             .catch(err => handleError(err));
     },
 
+    PatchBlogs: (request: IBlogModel) => {
+        return http.patch('/blogs', request)
+            .then(res => res)
+            .catch(err => handleError(err))
+    },
+
     DetailBlogs: (id: string) => {
         return http.get(`/blogs/${id}`)
             .then(res => res)

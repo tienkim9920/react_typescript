@@ -17,8 +17,11 @@ export const getBlogs = createAsyncThunk('blogs/get', async () => {
 })
 
 export const addBlogs = createAsyncThunk('blogs/add', async (request: IBlogModel) => {
-  const res = (await BlogService.AddBlogs(request)).data;
-  request._id = res;
+  return (await BlogService.AddBlogs(request)).data;
+})
+
+export const patchBlogs = createAsyncThunk('blogs/update', async (request: IBlogModel) => {
+  await BlogService.PatchBlogs(request);
   return request;
 })
 
@@ -44,6 +47,11 @@ export const blogSlice = createSlice({
 
     builder.addCase(addBlogs.fulfilled, (state: any, action: any) => {
       state.blogs = [action.payload, ...state.blogs];
+    });
+
+    builder.addCase(patchBlogs.fulfilled, (state: any, action: any) => {
+      const index = state.blogs.findIndex((el: BlogModel) => el._id === action.payload._id);
+      state.blogs[index].body = action.payload.body;
     });
 
     builder.addCase(deleteBlogs.fulfilled, (state: any, action: any) => {
