@@ -10,34 +10,30 @@ function AddBlog(props: any) {
 
     const dispatch = useAppDispatch();
 
-    const [title, setTitle] = useState<string>('');
-    const [username, setUsername] = useState<string>('');
-    const [body, setBody] = useState<string>('');
-    const [phone, setPhone] = useState<string>('');
+    const [blogModel, setBlogModel] = useState<BlogModel>({
+        title: '',
+        username: '',
+        body: '',
+        phone: ''
+    });
 
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleAddBlogs = () => {
-        const postModel = new BlogModel();
-        postModel.title = title;
-        postModel.username = username;
-        postModel.body = body;
-        postModel.phone = phone;
-
         setLoading(true);
-
         const postAddBlogs = async () => {
-            const res = await BlogService.AddBlogs(BlogsMapping.Map2Service(postModel));
+            const res = await BlogService.AddBlogs(BlogsMapping.Map2Service(blogModel));
             if (res.status === 200) {
                 setLoading(false);
-                setTitle('');
-                setUsername('');
-                setBody('');
-                setPhone('');
+                setBlogModel({
+                    title: '',
+                    username: '',
+                    body: '',
+                    phone: ''
+                })
                 dispatch(addBlogs(res.data));
             }
         }
-        
         postAddBlogs();
     }
 
@@ -46,22 +42,39 @@ function AddBlog(props: any) {
             <div>
                 <div className="font-size-30 color-main text-center">Add Blogs</div>
                 <div className='mt-5'>
-                    <input className='width-300 input-custom' type="text" placeholder='Enter Title' value={title} onChange={(e) => setTitle(e.target.value)} />
+                    <input 
+                        className='width-300 input-custom' 
+                        type="text" 
+                        placeholder='Enter Title' 
+                        value={blogModel.title?.toString()} 
+                        onChange={(e) => setBlogModel({...blogModel, title: e.target.value})} />
                 </div>
                 <div className='mt-5'>
-                    <input className='width-300 input-custom' type="text" placeholder='Enter Username' value={username} onChange={(e) => setUsername(e.target.value)} />
+                    <input 
+                        className='width-300 input-custom' 
+                        type="text" 
+                        placeholder='Enter Username' 
+                        value={blogModel.username?.toString()} 
+                        onChange={(e) => setBlogModel({...blogModel, username: e.target.value})} />
                 </div>
                 <div className='mt-5'>
-                    <input className='width-300 input-custom' type="text" placeholder='Enter Body'  value={body} onChange={(e) => setBody(e.target.value)} />
+                    <input 
+                        className='width-300 input-custom' 
+                        type="text" placeholder='Enter Body'  
+                        value={blogModel.body?.toString()}
+                        onChange={(e) => setBlogModel({...blogModel, body: e.target.value})} />
                 </div>
                 <div className='mt-5'>
-                    <input className='width-300 input-custom' type="text" placeholder='Enter Phone'  value={phone} onChange={(e) => setPhone(e.target.value)} />
+                    <input 
+                        className='width-300 input-custom' 
+                        type="text" placeholder='Enter Phone'  
+                        value={blogModel.phone?.toString()}
+                        onChange={(e) => setBlogModel({...blogModel, phone: e.target.value})} />
                 </div>
                 <div className='mt-5'>
                     <div className='width-300 bg-color-main text-center input-custom color-white pointer' onClick={handleAddBlogs}>Add Blogs</div>
                 </div>
             </div>
-
         </div>
     );
 }
