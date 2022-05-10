@@ -35,6 +35,9 @@ export const blogSlice = createSlice({
   initialState,
   reducers: {
     addBlogs: (state, action: PayloadAction<BlogModel>) => {
+      if (!state.blogs.length){
+        return;
+      }
       state.blogs = [
         action.payload, ...state.blogs
       ]

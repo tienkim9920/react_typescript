@@ -4,6 +4,7 @@ import { addBlogs } from '../app/blog.redux';
 import { BlogsMapping } from '../mapping/blogs.mapping';
 import { BlogModel } from '../model/blogs.model';
 import { BlogService } from '../service/blogs.service';
+import { ErrorService } from '../service/error.service';
 
 function AddBlog(props: any) {
 
@@ -27,16 +28,13 @@ function AddBlog(props: any) {
 
         const postAddBlogs = async () => {
             const res = await BlogService.AddBlogs(BlogsMapping.Map2Service(postModel));
-            if (res) {
+            if (res.status === 200) {
                 setLoading(false);
                 setTitle('');
                 setUsername('');
                 setBody('');
                 setPhone('');
-                console.log(res)
-            }else {
-                console.log(res);
-                console.log(39)
+                dispatch(addBlogs(res.data));
             }
         }
         

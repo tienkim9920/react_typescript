@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import Modal from '../component/Modal.component';
 import { BlogsMapping } from '../mapping/blogs.mapping';
 import { BlogModel } from '../model/blogs.model';
+import { BlogService } from '../service/blogs.service';
 
 function Todo(props: any) {
 
@@ -99,11 +100,17 @@ function Todo(props: any) {
         }
     };
 
-    const modelTodo = (event: any) => {
+    const modelTodo = async (event: any) => {
         setTextTodo(event.target.value)
         if (event.keyCode === 13) {
             const column = columns['toDo'];
-            const copiedItems = [{ id: Math.random().toString(), title: textTodo }, ...column.items];
+            const blogModel = new BlogModel();
+            blogModel.body = 'todo';
+            blogModel.phone = '123';
+            blogModel.title = textTodo;
+            blogModel.username = 'Kim T';
+            const res = (await BlogService.AddBlogs(BlogsMapping.Map2Service(blogModel))).data;
+            const copiedItems = [res, ...column.items];
             setColumns({
                 ...columns,
                 'toDo': {
