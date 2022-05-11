@@ -22,6 +22,7 @@ export const getBlogs = createAsyncThunk('blogs/get', async () => {
 
 export const patchBlogs = createAsyncThunk('blogs/update', async (request: IBlogModel) => {
   await BlogService.PatchBlogs(request);
+  console.log(request)
   return request;
 })
 
@@ -54,7 +55,7 @@ export const blogSlice = createSlice({
 
     builder.addCase(patchBlogs.fulfilled, (state: any, action: any) => {
       const index = state.blogs.findIndex((el: BlogModel) => el._id === action.payload._id);
-      state.blogs[index].body = action.payload.body;
+      state.blogs[index] = action.payload;
     });
 
     builder.addCase(deleteBlogs.fulfilled, (state: any, action: any) => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { deleteBlogs, getBlogs, patchBlogs } from '../app/blog.redux';
+import { addBlogs, deleteBlogs, getBlogs, patchBlogs } from '../app/blog.redux';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import Modal from '../component/Modal.component';
 import { BlogsMapping } from '../mapping/blogs.mapping';
@@ -62,7 +62,10 @@ function Todo(props: any) {
 
             const blogModel = new BlogModel();
             blogModel._id = removed._id;
+            blogModel.title = removed.title;
+            blogModel.username = removed.username;
             blogModel.body = destColumn.body;
+            blogModel.phone = destColumn.phone;
             dispatch(patchBlogs(BlogsMapping.Map2Service(blogModel)));
 
             setColumns({
@@ -110,6 +113,7 @@ function Todo(props: any) {
             blogModel.title = textTodo;
             blogModel.username = 'Kim T';
             const res = (await BlogService.AddBlogs(BlogsMapping.Map2Service(blogModel))).data;
+            dispatch(addBlogs(res));
             const copiedItems = [res, ...column.items];
             setColumns({
                 ...columns,
