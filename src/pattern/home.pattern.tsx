@@ -1,4 +1,14 @@
 export class ShowComponentHome {
-    home?: boolean;
-    edit?: boolean
+    home?: Boolean;
+    edit?: Boolean;
+}
+
+export class SearchOption {
+    search?: String;
+    option?: FilterOption;
+}
+
+export interface FilterOption {
+    label?: String,
+    value: String
 }

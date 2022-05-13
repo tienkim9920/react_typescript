@@ -13,8 +13,13 @@ a {
     color: #5c5c5c;
 }
 
+
 a:hover {
     color: #fff;
+}
+
+.color-dark {
+    color: #5c5c5c;
 }
 
 .color-main {
@@ -137,12 +142,23 @@ a:hover {
     width: 450px;
 }
 
+.width-250 {
+    width: 300px;
+}
+
+.width-225 {
+    width: 250px;
+}
+
+.width-200 {
+    width: 200px;
+}
+
 .input-custom {
     background-color: #fff;
     border: none;
     outline: none;
     padding: .75rem 1.5rem;
-    border-radius: 10px;
 }
 
 .pointer {

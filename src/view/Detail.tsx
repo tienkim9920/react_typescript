@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { deleteBlogs, getDetailBlog } from '../app/blog.redux';
+import { deleteBlogs } from '../app/blog.redux';
 import { BlogModel } from '../model/blogs.model';
 import { BlogService } from '../service/blogs.service';
 

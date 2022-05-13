@@ -1,0 +1,26 @@
+.group-option {
+    position: relative;
+}
+
+.box-option {
+    position: absolute;
+    top: 3.5rem;
+    left: 0;
+    transition: all .3s ease-in-out;
+    background-color: #fff;
+    z-index: 999;
+    opacity: 0;
+    transform: translateY(-30px);
+    visibility: hidden;
+    box-shadow: 5px 10px 18px #e2e2e2;
+}
+
+.box-option.active {
+    opacity: 1;
+    transform: translateY(0px);
+    visibility: visible;
+}
+
+.item-option:hover{
+    background-color: #f0f0f0;
+}

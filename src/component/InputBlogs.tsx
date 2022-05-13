@@ -6,6 +6,7 @@ function InputBlogs(props: any) {
     const { blogModel, categoryInput, onHandler, backStep } = props;
 
     const [blogBackup, setBlogBackup] = useState<BlogModel>({
+        _id: blogModel ? blogModel._id : null,
         title: blogModel ? blogModel.title : '',
         username: blogModel ? blogModel.username : '',
         body: blogModel ? blogModel.body : '',
