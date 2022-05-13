@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { deleteBlogs } from '../app/blog.redux';
@@ -10,7 +10,6 @@ function Detail(props: any) {
     const { id } = useParams<any>();
     const [blog, setBlog] = useState<BlogModel>({});
 
-    // const getTest = useAppSelector(getDetailBlog());
     const { blogs } = useAppSelector(state => state.blog);
     const dispatch = useAppDispatch();
 
@@ -43,7 +42,7 @@ function Detail(props: any) {
             <div className='font-size-20 mt-2'>{blog.body}</div>
             <div className='font-size-20 mt-2'>{blog.phone}</div>
             <div className='mt-5 d-flex'>
-                <div className='bg-color-main text-center color-white pointer input-custom' onClick={handleDelete}>Delete</div>
+                <div className='bg-color-main text-center color-white pointer input-custom radius-5' onClick={handleDelete}>Delete</div>
             </div>
         </div>
     );

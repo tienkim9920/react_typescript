@@ -1,8 +1,7 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { addBlogs, deleteBlogs, getBlogs, patchBlogs } from '../app/blog.redux';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import Modal from '../component/Modal.component';
 import { BlogsMapping } from '../mapping/blogs.mapping';
 import { BlogModel } from '../model/blogs.model';
 import { BlogService } from '../service/blogs.service';

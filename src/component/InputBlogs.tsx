@@ -37,7 +37,7 @@ function InputBlogs(props: any) {
 
                 <div className='mt-5'>
                     <input
-                        className='width-300 input-custom'
+                        className='width-300 input-custom radius-5'
                         type="text"
                         placeholder='Enter Title'
                         value={blogBackup.title?.toString()}
@@ -45,7 +45,7 @@ function InputBlogs(props: any) {
                 </div>
                 <div className='mt-5'>
                     <input
-                        className='width-300 input-custom'
+                        className='width-300 input-custom radius-5'
                         type="text"
                         placeholder='Enter Username'
                         value={blogBackup.username?.toString()}
@@ -53,14 +53,14 @@ function InputBlogs(props: any) {
                 </div>
                 <div className='mt-5'>
                     <input
-                        className='width-300 input-custom'
+                        className='width-300 input-custom radius-5'
                         type="text" placeholder='Enter Body'
                         value={blogBackup.body?.toString()}
                         onChange={(e) => setBlogBackup({ ...blogBackup, body: e.target.value })} />
                 </div>
                 <div className='mt-5'>
                     <input
-                        className='width-300 input-custom'
+                        className='width-300 input-custom radius-5'
                         type="text" placeholder='Enter Phone'
                         value={blogBackup.phone?.toString()}
                         onChange={(e) => setBlogBackup({ ...blogBackup, phone: e.target.value })} />
@@ -68,10 +68,10 @@ function InputBlogs(props: any) {
                 {
                     categoryInput === 'Add' ? 
                     <div className='mt-5'>
-                        <div className='width-300 bg-color-main text-center input-custom color-white pointer' onClick={onEventAddBlog}>Add Blogs</div>
+                        <div className='width-300 bg-color-main text-center input-custom radius-5 color-white pointer' onClick={onEventAddBlog}>Add Blogs</div>
                     </div> : 
                     <div className='mt-5'>
-                        <div className='width-300 bg-color-main text-center input-custom color-white pointer' onClick={onEventEditBlog}>Edit Blogs</div>
+                        <div className='width-300 bg-color-main text-center input-custom radius-5 color-white pointer' onClick={onEventEditBlog}>Edit Blogs</div>
                     </div>
                 }
             </div>

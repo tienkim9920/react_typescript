@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { BlogModel } from '../model/blogs.model';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { getBlogs, patchBlogs, searchBlogs } from '../app/blog.redux';
@@ -7,8 +7,14 @@ import { FilterOption, SearchOption, ShowComponentHome } from '../pattern/home.p
 import InputBlogs from '../component/InputBlogs';
 import { BlogsMapping } from '../mapping/blogs.mapping';
 import { VALUE_OPTION } from '../global/constant.global';
+import Pagination from '../component/pagination.component';
 // import { ErrorService } from '../service/error.service';
 
+function useQuery() {
+    const { search } = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+}
 
 function Home(props: any) {
     const { blogs, backup } = useAppSelector((state: any) => state.blog);
@@ -23,12 +29,25 @@ function Home(props: any) {
         option: {} as FilterOption
     });
     const [statusOption, setStatusOption] = useState<Boolean>(false);
+    const router = useHistory();
+
+    // pagination
+    const currentPage = useQuery().get('page');
+    const [totalPage, setTotalPage] = useState<Number>();
+
+    // pagination
+    const onChangePage = (event: any) => {
+        router.push(`/blogs?page=${event}`)
+    }
 
     useEffect(() => {
         if (!blogs.length) {
             dispatch(getBlogs());
         }
-    }, [])
+        if (blogs.length > 0) {
+            setTotalPage(Math.floor(blogs.length / 4));
+        }
+    }, [blogs])
 
     const changeStatusComponent = (event: BlogModel) => {
         setBlogEdit(event);
@@ -45,21 +64,12 @@ function Home(props: any) {
     const handleSearchOption = (event: any) => {
         const search = event.target.value;
         setSearchOption({ ...searchOption, search })
-        if (!search){
-            dispatch(searchBlogs(backup));
-            return;
-        }
-        const filterBlogs = backup.filter((item: BlogModel) => {
-            return item.title?.toString().toUpperCase().indexOf(search.toString().toUpperCase()) !== -1
-        });
-        dispatch(searchBlogs(filterBlogs));
+        methodSearchOption(search, searchOption.option!.value);
     }
 
-    const handleChooseOption = (item: FilterOption) => {
-        setSearchOption({
-            ...searchOption,
-            option: item
-        });
+    const handleChooseOption = (option: FilterOption) => {
+        setSearchOption({ ...searchOption, option });
+        methodSearchOption(searchOption.search!, option.value);
     }
 
     const backStep = () => {
@@ -69,38 +79,51 @@ function Home(props: any) {
         });
     }
 
+    function methodSearchOption(search: String, option: String) {
+        if (!search && (option === 'all' || !option)) {
+            dispatch(searchBlogs(backup));
+            return;
+        }
+        const filterBlogs = backup.filter((item: BlogModel) => {
+            return option === 'all' || !option ?
+                item.title?.toString().toUpperCase().indexOf(search.toUpperCase()) !== -1 :
+                item.title?.toString().toUpperCase().indexOf(search.toUpperCase()) !== -1 && item.body === option
+        });
+        dispatch(searchBlogs(filterBlogs));
+    }
+
     return (
         <div className="pb-5">
             {
                 showComponent.home && <div>
+                    <div className='d-flex justify-content-between'>
+                        <div className='mt-5'>
+                            <input
+                                className='width-250 input-custom radius-5 color-dark'
+                                type="text"
+                                placeholder='Enter Search'
+                                value={searchOption?.search?.toString()}
+                                onChange={(event) => handleSearchOption(event)} />
+                        </div>
+                        <div className='mt-5 group-option' onClick={() => setStatusOption(!statusOption)}>
+                            <div className='width-225 input-custom radius-5 color-dark pointer'>{!searchOption?.option?.label ? 'Choose Filter' : searchOption.option.label}</div>
+                            <div className={`width-225 box-option radius-5 ${statusOption ? 'active' : 'inactive'}`}>
+                                {
+                                    VALUE_OPTION.map((item: FilterOption, index) => (
+                                        <div
+                                            key={index}
+                                            className='input-custom item-option color-dark pointer'
+                                            onClick={() => handleChooseOption(item)}>
+                                            {item.label}
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                        </div>
+                    </div>
                     {!blogs.length && <div className='mt-5'>Loading...</div>}
                     {
                         blogs.length > 0 && <div className="group-todo">
-                            <div className='d-flex justify-content-between'>
-                                <div className='mt-5'>
-                                    <input
-                                        className='width-250 input-custom radius-5 color-dark'
-                                        type="text"
-                                        placeholder='Enter Search'
-                                        value={searchOption?.search?.toString()}
-                                        onChange={(event) => handleSearchOption(event)} />
-                                </div>
-                                <div className='mt-5 group-option' onClick={() => setStatusOption(!statusOption)}>
-                                    <div className='width-225 input-custom radius-5 color-dark pointer'>{!searchOption?.option?.label ? 'Choose Filter' : searchOption.option.label}</div>
-                                    <div className={`width-225 box-option radius-5 ${statusOption ? 'active' : 'inactive'}`}>
-                                        {
-                                            VALUE_OPTION.map((item: FilterOption, index) => (
-                                                <div 
-                                                    key={index}
-                                                    className='input-custom item-option color-dark pointer' 
-                                                    onClick={() => handleChooseOption(item)}>
-                                                    {item.label}
-                                                </div>
-                                            ))
-                                        }
-                                    </div>
-                                </div>
-                            </div>
                             {blogs && blogs.map((item: BlogModel, index: string) => (
                                 <div className="box-todo p-3 mt-5 d-flex justify-content-between radius-5" key={`${index}`}>
                                     <div>
@@ -117,6 +140,10 @@ function Home(props: any) {
                             ))}
                         </div>
                     }
+                    <div className="mt-5">
+                        {/* pagination */}
+                        <Pagination currentPage={currentPage} onChangePage={onChangePage} totalPage={totalPage} />
+                    </div>
                 </div>
             }
             {

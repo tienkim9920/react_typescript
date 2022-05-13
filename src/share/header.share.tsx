@@ -5,7 +5,7 @@ function Header(props: any) {
     return (
         <div className="section-header">
             <div className="layout-header container d-flex justify-content-between p-3">
-                <Link to="/" className="group-header-logo">
+                <Link to="/blogs?page=1" className="group-header-logo">
                     <h3 className="h3-header-logo color-main">The Todo Blog</h3>
                 </Link>
                 <div className="d-flex mt-2">
