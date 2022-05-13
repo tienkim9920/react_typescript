@@ -37,7 +37,7 @@ function Pagination(props: any) {
                     {
                         pages && pages.map((item: any) => (
                             <li className={`page-item ${Number(item) === Number(currentPage) && 'active'}`} key={item}>
-                                <Link to={`/blogs?page=${item}`} className="page-link pointer">{item}</Link>
+                                <Link to={`/?page=${item}`} className="page-link pointer">{item}</Link>
                             </li>
                         ))
                     }

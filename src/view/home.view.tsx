@@ -37,7 +37,7 @@ function Home(props: any) {
 
     // pagination
     const onChangePage = (event: any) => {
-        router.push(`/blogs?page=${event}`)
+        router.push(`/?page=${event}`)
     }
 
     useEffect(() => {
@@ -142,7 +142,7 @@ function Home(props: any) {
                     }
                     <div className="mt-5">
                         {/* pagination */}
-                        <Pagination currentPage={currentPage} onChangePage={onChangePage} totalPage={totalPage} />
+                        <Pagination currentPage={currentPage ? currentPage : 1} onChangePage={onChangePage} totalPage={Number(totalPage) > 0 ? totalPage : 1} />
                     </div>
                 </div>
             }
