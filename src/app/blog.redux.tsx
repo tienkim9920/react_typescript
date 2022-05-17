@@ -41,13 +41,13 @@ export const blogSlice = createSlice({
       ]
     },
     searchBlogs: (state, action: PayloadAction<any>) => {
-      state.blogs = action.payload;
+      state.blogs = [...action.payload];
     }
   },
   extraReducers: (builder) => {
     builder.addCase(getBlogs.fulfilled, (state: any, action: any) => {
-      state.blogs = action.payload;
-      state.backup = action.payload;
+      state.blogs = [...action.payload];
+      state.backup = [...action.payload];
     });
 
     builder.addCase(patchBlogs.fulfilled, (state: any, action: any) => {

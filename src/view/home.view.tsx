@@ -6,7 +6,7 @@ import { getBlogs, patchBlogs, searchBlogs } from '../app/blog.redux';
 import { FilterOption, SearchOption, ShowComponentHome } from '../pattern/home.pattern';
 import InputBlogs from '../component/InputBlogs';
 import { BlogsMapping } from '../mapping/blogs.mapping';
-import { VALUE_OPTION } from '../global/constant.global';
+import { LIMIT_PAGINATION, VALUE_OPTION } from '../global/constant.global';
 import Pagination from '../component/pagination.component';
 // import { ErrorService } from '../service/error.service';
 
@@ -35,19 +35,32 @@ function Home(props: any) {
     const currentPage = useQuery().get('page');
     const [totalPage, setTotalPage] = useState<Number>();
 
+    const [reloadBlogs, setReloadBlogs] = useState<boolean>(false);
+    const [visibleBlogs, setVisibleBlogs] = useState<any>([]);
+
     // pagination
     const onChangePage = (event: any) => {
         router.push(`/?page=${event}`)
     }
 
     useEffect(() => {
-        if (!blogs.length) {
+        if (!blogs.length && !reloadBlogs){
             dispatch(getBlogs());
         }
-        if (blogs.length > 0) {
-            setTotalPage(Math.floor(blogs.length / 4));
+        if (blogs.length > 0 && !reloadBlogs){
+            setTotalPage(Math.ceil(blogs.length / LIMIT_PAGINATION));
+            if (!reloadBlogs){
+                paginationBlogs();
+                setReloadBlogs(true);
+            }
         }
     }, [blogs])
+
+    useEffect(() => {
+        if (reloadBlogs){
+            paginationBlogs();
+        }
+    }, [currentPage])
 
     const changeStatusComponent = (event: BlogModel) => {
         setBlogEdit(event);
@@ -63,13 +76,21 @@ function Home(props: any) {
 
     const handleSearchOption = (event: any) => {
         const search = event.target.value;
-        setSearchOption({ ...searchOption, search })
-        methodSearchOption(search, searchOption.option!.value);
+        const cloneSearchOption = {
+            search,
+            option: searchOption.option
+        } as SearchOption;
+        methodSearchOption(cloneSearchOption);
+        setSearchOption(cloneSearchOption);
     }
 
     const handleChooseOption = (option: FilterOption) => {
-        setSearchOption({ ...searchOption, option });
-        methodSearchOption(searchOption.search!, option.value);
+        const cloneSearchOption = {
+            search: searchOption.search,
+            option
+        } as SearchOption;
+        methodSearchOption(cloneSearchOption);
+        setSearchOption(cloneSearchOption);
     }
 
     const backStep = () => {
@@ -79,7 +100,10 @@ function Home(props: any) {
         });
     }
 
-    function methodSearchOption(search: String, option: String) {
+    function methodSearchOption(valueSearchOption: SearchOption) {
+        const search = valueSearchOption.search || '';
+        const option = valueSearchOption.option?.value;
+        setReloadBlogs(false);
         if (!search && (option === 'all' || !option)) {
             dispatch(searchBlogs(backup));
             return;
@@ -90,6 +114,14 @@ function Home(props: any) {
                 item.title?.toString().toUpperCase().indexOf(search.toUpperCase()) !== -1 && item.body === option
         });
         dispatch(searchBlogs(filterBlogs));
+    }
+
+    function paginationBlogs() {
+        const indexPage = currentPage ? currentPage : 1;
+        const start = (Number(indexPage) - 1) * LIMIT_PAGINATION;
+        const end = (Number(indexPage) * LIMIT_PAGINATION);
+        const sliceBlogs = blogs.slice(start, end);
+        setVisibleBlogs(sliceBlogs);
     }
 
     return (
@@ -121,10 +153,10 @@ function Home(props: any) {
                             </div>
                         </div>
                     </div>
-                    {!blogs.length && <div className='mt-5'>Loading...</div>}
+                    {!visibleBlogs.length && <div className='mt-5'>Loading...</div>}
                     {
-                        blogs.length > 0 && <div className="group-todo">
-                            {blogs && blogs.map((item: BlogModel, index: string) => (
+                        visibleBlogs.length > 0 && <div className="group-todo">
+                            {visibleBlogs && visibleBlogs.map((item: BlogModel, index: string) => (
                                 <div className="box-todo p-3 mt-5 d-flex justify-content-between radius-5" key={`${index}`}>
                                     <div>
                                         <div className='font-weight-bold color-main font-size-25'>{item.title}</div>

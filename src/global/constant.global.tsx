@@ -16,3 +16,5 @@ export const VALUE_OPTION = [
         value: 'done'
     }
 ];
+
+export const LIMIT_PAGINATION = 3;
