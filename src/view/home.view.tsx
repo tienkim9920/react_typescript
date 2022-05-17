@@ -36,36 +36,14 @@ function Home(props: any) {
     const [totalPage, setTotalPage] = useState<Number>();
 
     const [first, setFirst] = useState<boolean>(false);
-    const [reloadBlogs, setReloadBlogs] = useState<boolean>(false);
     const [visibleBlogs, setVisibleBlogs] = useState<any>([]);
 
-    // pagination
-    const onChangePage = (event: any) => {
-        router.push(`/?page=${event}`)
+    const backStep = () => {
+        setShowComponent({
+            home: true,
+            edit: false
+        });
     }
-
-    useEffect(() => {
-        if (!blogs.length && !first){
-            dispatch(getBlogs());
-            setFirst(true);
-        }
-        if (blogs.length > 0 && !reloadBlogs){
-            setTotalPage(Math.ceil(blogs.length / LIMIT_PAGINATION));
-            if (!reloadBlogs){
-                paginationBlogs();
-                setReloadBlogs(true);
-            }
-        }else {
-            setTotalPage(Math.ceil(blogs.length / LIMIT_PAGINATION));
-            paginationBlogs();
-        }
-    }, [blogs])
-
-    useEffect(() => {
-        if (reloadBlogs){
-            paginationBlogs();
-        }
-    }, [currentPage])
 
     const changeStatusComponent = (event: BlogModel) => {
         setBlogEdit(event);
@@ -78,6 +56,22 @@ function Home(props: any) {
     const handleEditBlog = (blog: BlogModel) => {
         dispatch(patchBlogs(BlogsMapping.Map2Service(blog)));
     }
+
+    // pagination
+    const onChangePage = (event: any) => {
+        router.push(`/?page=${event}`)
+    }
+
+    useEffect(() => {
+        if (!blogs.length && !first){
+            dispatch(getBlogs());
+            setFirst(true);
+        }
+        if (blogs.length > 0 || !blogs.length){
+            setTotalPage(Math.ceil(blogs.length / LIMIT_PAGINATION));
+            paginationBlogs();
+        }
+    }, [blogs, currentPage])
 
     const handleSearchOption = (event: any) => {
         const search = event.target.value;
@@ -98,17 +92,9 @@ function Home(props: any) {
         setSearchOption(cloneSearchOption);
     }
 
-    const backStep = () => {
-        setShowComponent({
-            home: true,
-            edit: false
-        });
-    }
-
     function methodSearchOption(valueSearchOption: SearchOption) {
         const search = valueSearchOption.search || '';
         const option = valueSearchOption.option?.value;
-        setReloadBlogs(false);
         if (!search && (option === 'all' || !option)) {
             dispatch(searchBlogs(backup));
             return;
