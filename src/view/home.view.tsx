@@ -35,6 +35,7 @@ function Home(props: any) {
     const currentPage = useQuery().get('page');
     const [totalPage, setTotalPage] = useState<Number>();
 
+    const [first, setFirst] = useState<boolean>(false);
     const [reloadBlogs, setReloadBlogs] = useState<boolean>(false);
     const [visibleBlogs, setVisibleBlogs] = useState<any>([]);
 
@@ -44,8 +45,9 @@ function Home(props: any) {
     }
 
     useEffect(() => {
-        if (!blogs.length && !reloadBlogs){
+        if (!blogs.length && !first){
             dispatch(getBlogs());
+            setFirst(true);
         }
         if (blogs.length > 0 && !reloadBlogs){
             setTotalPage(Math.ceil(blogs.length / LIMIT_PAGINATION));
@@ -53,6 +55,9 @@ function Home(props: any) {
                 paginationBlogs();
                 setReloadBlogs(true);
             }
+        }else {
+            setTotalPage(Math.ceil(blogs.length / LIMIT_PAGINATION));
+            paginationBlogs();
         }
     }, [blogs])
 
