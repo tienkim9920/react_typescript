@@ -161,6 +161,12 @@ a:hover {
     padding: .75rem 1.5rem;
 }
 
+.input-custom:disabled,
+.input-custom[disabled]{
+  background-color: #c78894 !important;
+  /* color: #616161 !important; */
+}
+
 .pointer {
     cursor: pointer;
 }

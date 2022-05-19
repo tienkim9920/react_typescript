@@ -7,18 +7,6 @@ import { BlogModel } from '../model/blogs.model';
 import { BlogService } from '../service/blogs.service';
 
 function Todo(props: any) {
-
-    const tasks = [
-        { id: '1', title: 'Chạy bộ' },
-        { id: '2', title: 'Ăn cơm' },
-        { id: '3', title: 'Ca Hát' },
-        { id: '4', title: 'Học bài' },
-        { id: '5', title: 'Nhảy dây' },
-        { id: '6', title: 'Học bài' },
-        { id: '7', title: 'Nhảy dây' },
-        { id: '8', title: 'Xem phim' },
-    ];
-
     const taskStatus = {
         toDo: {
             name: "To do",

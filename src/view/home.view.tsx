@@ -8,6 +8,7 @@ import InputBlogs from '../component/InputBlogs';
 import { BlogsMapping } from '../mapping/blogs.mapping';
 import { LIMIT_PAGINATION, VALUE_OPTION } from '../global/constant.global';
 import Pagination from '../component/pagination.component';
+import { AuthenticateLocal } from '../local/authenticate.local';
 // import { ErrorService } from '../service/error.service';
 
 function useQuery() {
@@ -46,6 +47,12 @@ function Home(props: any) {
     }
 
     const changeStatusComponent = (event: BlogModel) => {
+        if (!AuthenticateLocal.getToken()){
+            router.push('/login');
+        }
+        if (AuthenticateLocal.checkPermission() === 'client'){
+            return;
+        }
         setBlogEdit(event);
         setShowComponent({
             home: false,
@@ -63,11 +70,11 @@ function Home(props: any) {
     }
 
     useEffect(() => {
-        if (!blogs.length && !first){
+        if (!blogs.length && !first) {
             dispatch(getBlogs());
             setFirst(true);
         }
-        if (blogs.length > 0 || !blogs.length){
+        if (blogs.length > 0 || !blogs.length) {
             setTotalPage(Math.ceil(blogs.length / LIMIT_PAGINATION));
             paginationBlogs();
         }
@@ -114,6 +121,7 @@ function Home(props: any) {
         const sliceBlogs = blogs.slice(start, end);
         setVisibleBlogs(sliceBlogs);
     }
+
 
     return (
         <div className="pb-5">

@@ -6,7 +6,6 @@ export class BlogsMapping {
         if (!model){
             return null as any;
         }
-
         const result: IBlogModel = {
             _id: model._id,
             title: model.title,
@@ -14,7 +13,6 @@ export class BlogsMapping {
             body: model.body,
             phone: model.phone
         }
-
         return result
     }
 }

@@ -6,6 +6,7 @@ import Home from './view/home.view';
 import Detail from './view/detail.view';
 import AddBlog from './view/addblog.view';
 import Todo from './view/todo.view';
+import SignIn from './view/signin.view';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path='/blogs/:id' component={Detail} />
           <Route path='/add' component={AddBlog} />
           <Route path='/list' component={Todo} />
+          <Route path='/login' component={SignIn} />
         </Switch>
       </div>
     </BrowserRouter>

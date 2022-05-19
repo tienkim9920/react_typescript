@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IBlogModel } from '../interface/blogs.interface';
 import { BlogModel } from '../model/blogs.model';
 import { BlogService } from '../service/blogs.service';
