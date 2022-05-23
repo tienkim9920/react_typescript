@@ -4,7 +4,7 @@ import { BlogModel } from '../model/blogs.model';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { getBlogs, patchBlogs, searchBlogs } from '../app/blog.redux';
 import { FilterOption, SearchOption, ShowComponentHome } from '../pattern/home.pattern';
-import InputBlogs from '../component/InputBlogs';
+import InputBlogs from '../component/input-blog.component';
 import { BlogsMapping } from '../mapping/blogs.mapping';
 import { LIMIT_PAGINATION, VALUE_OPTION } from '../global/constant.global';
 import Pagination from '../component/pagination.component';

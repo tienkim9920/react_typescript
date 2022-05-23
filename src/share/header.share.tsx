@@ -12,6 +12,7 @@ function Header(props: any) {
                     <div className="header-link"><NavLink activeClassName="is-active" to="/" exact={true}>Home</NavLink></div>
                     <div className="header-link ml-1"><NavLink activeClassName="is-active" to="/add">Add Post</NavLink></div>
                     <div className="header-link ml-1"><NavLink activeClassName="is-active" to="/list">Todo List</NavLink></div>
+                    <div className="header-link ml-1"><NavLink activeClassName="is-active" to="/table">Table List</NavLink></div>
                 </div>
             </div>
         </div>
