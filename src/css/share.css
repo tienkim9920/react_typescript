@@ -1,6 +1,6 @@
 body {
     font-family: 'Raleway', sans-serif;
-    background-color: rgb(243, 243, 243);
+    background-color: rgb(246, 246, 246);
 }
 
 .App {
@@ -138,6 +138,14 @@ a:hover {
     font-size: 20px;
 }
 
+.font-size-16 {
+    font-size: 16px;
+}
+
+.font-size-14 {
+    font-size: 14px;
+}
+
 .width-300 {
     width: 450px;
 }
@@ -148,6 +156,10 @@ a:hover {
 
 .width-225 {
     width: 250px;
+}
+
+.width-222-1{
+    width: 225px;
 }
 
 .width-200 {
