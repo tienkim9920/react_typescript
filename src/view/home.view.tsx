@@ -112,6 +112,7 @@ function Home(props: any) {
                 item.title?.toString().toUpperCase().indexOf(search.toUpperCase()) !== -1 && item.body === option
         });
         dispatch(searchBlogs(filterBlogs));
+        router.push(`/?page=1`);
     }
 
     function paginationBlogs() {

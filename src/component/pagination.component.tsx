@@ -7,21 +7,25 @@ function Pagination(props: any) {
     const [pages, setPages] = useState<any>();
 
     const handlerChangePage = (event: Number) => {
-        if (event > totalPage || event === 0) {
+        if (event === 0) {
             return;
         }
         onChangePage(event);
     }
 
     useEffect(() => {
-        if (totalPage) {
-            let listPage = [];
-            for (let i = 0; i < totalPage; i++) {
-                listPage.push(i + 1);
-            }
-            setPages(listPage)
+        let listPage = [];
+        if (Number(currentPage) - 1 !== 0){
+            listPage.push(Number(currentPage) - 1);
+            listPage.push(Number(currentPage));
+        }else {
+            listPage.push(Number(currentPage));
         }
-    }, [totalPage])
+        if (totalPage > 1) {
+            listPage.push(Number(currentPage) + 1);
+        }
+        setPages(listPage);
+    }, [currentPage, totalPage])
 
     return (
         <div className="demo">

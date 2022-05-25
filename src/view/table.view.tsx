@@ -35,12 +35,16 @@ function Table() {
         previousPage,
         canNextPage,
         canPreviousPage,
+        pageOptions,
+        // gotoPage,
+        // pageCount,
+        setPageSize,
         prepareRow,
         state,
         setGlobalFilter,
     } = useTable({ columns, data, defaultColumn }, useFilters, useGlobalFilter, usePagination)
 
-    const { globalFilter } = state;
+    const { globalFilter, pageIndex, pageSize } = state;
 
     return (
         <div className="mt-5 mb-5">
@@ -75,12 +79,26 @@ function Table() {
                     })}
                 </tbody>
             </table>
-            <PaginationButton 
-                previousPage={previousPage} 
-                canPreviousPage={canPreviousPage}
-                nextPage={nextPage} 
-                canNextPage={canNextPage} 
-                />
+            <div className="d-flex justify-content-center mt-4">
+            <span className="mt-3">Page <strong>{pageIndex + 1} of {pageOptions.length} </strong></span> &nbsp;
+                {/* <button onClick={() => gotoPage(0)}>{'<<<'}</button> */}
+                <select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
+                    {
+                        [5, 10, 15].map((item) => (
+                            <option key={item} value={item}>
+                                Show {item}
+                            </option>
+                        ))
+                    }
+                </select>
+                <PaginationButton 
+                    previousPage={previousPage} 
+                    canPreviousPage={canPreviousPage}
+                    nextPage={nextPage} 
+                    canNextPage={canNextPage} 
+                    />
+                {/* <button onClick={() => gotoPage(pageCount - 1)}>{'>>>'}</button> */}
+            </div>
         </div>
         
     );

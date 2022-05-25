@@ -8,7 +8,6 @@ function PaginationButton(props: any) {
     // ex: disabled={!canPreviousPage}
 
     return (
-        <div className="demo mt-4">
         <nav className="pagination-outer" aria-label="Page navigation">
             <ul className="pagination">
             <li className="page-item" onClick={previousPage}>
@@ -23,7 +22,6 @@ function PaginationButton(props: any) {
             </li>
             </ul>
         </nav>
-        </div>
     );
 }
 
