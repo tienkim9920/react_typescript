@@ -23,7 +23,7 @@ a:hover {
 }
 
 .color-main {
-    color: #dd8896;
+    color: #04764E;
 }
 
 .color-white {
@@ -31,7 +31,7 @@ a:hover {
 }
 
 .bg-color-main {
-    background-color: #dd8896 !important;
+    background-color: #04764E !important;
 }
 
 .bg-color-gray-fade {
@@ -52,6 +52,10 @@ a:hover {
 
 .mt-2 {
     margin-top: 2rem;
+}
+
+.mt-2-5 {
+    margin-top: .7rem;
 }
 
 .mt-5 {
@@ -175,7 +179,7 @@ a:hover {
 
 .input-custom:disabled,
 .input-custom[disabled]{
-  background-color: #c78894 !important;
+  background-color: #04764E !important;
   /* color: #616161 !important; */
 }
 

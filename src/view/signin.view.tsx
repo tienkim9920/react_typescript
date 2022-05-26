@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useAppDispatch } from '../app/hooks';
+import { setPermission } from '../app/permission.redux';
+import { HEADER_ORDER_TABLE } from '../global/constant.global';
 import { AuthenticateLocal } from '../local/authenticate.local';
 import { UserMapping } from '../mapping/user.mapping';
 import { UserLogin } from '../pattern/user-login.pattern';
 import { UserService } from '../service/users.service';
 
 function SignIn(props: any) {
+    const dispatch = useAppDispatch();
     const router = useHistory();
     const [messageError, setMessageError] = useState<String>('');
     const [userLogin, setUserLogin] = useState<UserLogin>({
@@ -23,9 +27,10 @@ function SignIn(props: any) {
             return;
         }
         AuthenticateLocal.setToken(res.data);
+        dispatch(setPermission(AuthenticateLocal.getPermission()));
         router.goBack();
     }
-
+    
     return (
         <div className="section-addblog">
             <div>

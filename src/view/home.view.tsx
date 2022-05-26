@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { BlogModel } from '../model/blogs.model';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
@@ -6,9 +6,12 @@ import { getBlogs, patchBlogs, searchBlogs } from '../app/blog.redux';
 import { FilterOption, SearchOption, ShowComponentHome } from '../pattern/home.pattern';
 import InputBlogs from '../component/input-blog.component';
 import { BlogsMapping } from '../mapping/blogs.mapping';
-import { LIMIT_PAGINATION, VALUE_OPTION } from '../global/constant.global';
+import { HEADER_ORDER_TABLE, LIMIT_PAGINATION, VALUE_OPTION } from '../global/constant.global';
 import Pagination from '../component/pagination.component';
 import { AuthenticateLocal } from '../local/authenticate.local';
+import TableData from '../component/table-data.component';
+import SearchColumn from '../component/search-column.component';
+import { getOrders } from '../app/order.redux';
 // import { ErrorService } from '../service/error.service';
 
 function useQuery() {
@@ -18,7 +21,8 @@ function useQuery() {
 }
 
 function Home(props: any) {
-    const { blogs, backup } = useAppSelector((state: any) => state.blog);
+    const { blogs, backup } = useAppSelector(state => state.blog);
+    const { permission } = useAppSelector(state => state.permission)
     const dispatch = useAppDispatch();
     const [showComponent, setShowComponent] = useState<ShowComponentHome>({
         home: true,
@@ -47,12 +51,6 @@ function Home(props: any) {
     }
 
     const changeStatusComponent = (event: BlogModel) => {
-        if (!AuthenticateLocal.getToken()){
-            router.push('/login');
-        }
-        if (AuthenticateLocal.checkPermission() === 'client'){
-            return;
-        }
         setBlogEdit(event);
         setShowComponent({
             home: false,
@@ -68,6 +66,12 @@ function Home(props: any) {
     const onChangePage = (event: any) => {
         router.push(`/?page=${event}`)
     }
+
+    useLayoutEffect(() => {
+        if (!AuthenticateLocal.getToken()){
+            router.push('/login');
+        }
+    }, [])
 
     useEffect(() => {
         if (!blogs.length && !first) {
@@ -123,65 +127,96 @@ function Home(props: any) {
         setVisibleBlogs(sliceBlogs);
     }
 
+    const { orders } = useAppSelector(state => state.order);
+
+    const columns = useMemo(() => HEADER_ORDER_TABLE, []);
+    const data = useMemo(() => {
+        if (!orders.length) {
+            dispatch(getOrders());
+        }
+        console.log(orders);
+        return orders;
+    }, [orders]);
+
+    const defaultColumn = useMemo(() => {
+        return {
+            Filter: SearchColumn
+        }
+    }, [])
 
     return (
-        <div className="pb-5">
-            {
-                showComponent.home && <div>
-                    <div className='d-flex justify-content-between'>
-                        <div className='mt-5'>
-                            <input
-                                className='width-250 input-custom radius-5 color-dark'
-                                type="text"
-                                placeholder='Enter Search'
-                                value={searchOption?.search?.toString()}
-                                onChange={(event) => handleSearchOption(event)} />
-                        </div>
-                        <div className='mt-5 group-option' onClick={() => setStatusOption(!statusOption)}>
-                            <div className='width-225 input-custom radius-5 color-dark pointer'>{!searchOption?.option?.label ? 'Choose Filter' : searchOption.option.label}</div>
-                            <div className={`width-225 box-option radius-5 ${statusOption ? 'active' : 'inactive'}`}>
-                                {
-                                    VALUE_OPTION.map((item: FilterOption, index) => (
-                                        <div
-                                            key={index}
-                                            className='input-custom item-option color-dark pointer'
-                                            onClick={() => handleChooseOption(item)}>
-                                            {item.label}
-                                        </div>
-                                    ))
-                                }
+        <div>
+            { permission === 'client' && 
+                <div className="pb-5">
+                {
+                    showComponent.home && 
+                    <div>
+                        <div className='d-flex justify-content-between'>
+                            <div className='mt-5'>
+                                <input
+                                    className='width-250 input-custom radius-5 color-dark'
+                                    type="text"
+                                    placeholder='Enter Search'
+                                    value={searchOption?.search?.toString()}
+                                    onChange={(event) => handleSearchOption(event)} />
+                            </div>
+                            <div className='mt-5 group-option' onClick={() => setStatusOption(!statusOption)}>
+                                <div className='width-225 input-custom radius-5 color-dark pointer'>{!searchOption?.option?.label ? 'Choose Filter' : searchOption.option.label}</div>
+                                <div className={`width-225 box-option radius-5 ${statusOption ? 'active' : 'inactive'}`}>
+                                    {
+                                        VALUE_OPTION.map((item: FilterOption, index) => (
+                                            <div
+                                                key={index}
+                                                className='input-custom item-option color-dark pointer'
+                                                onClick={() => handleChooseOption(item)}>
+                                                {item.label}
+                                            </div>
+                                        ))
+                                    }
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    {!visibleBlogs.length && <div className='mt-5'>Loading...</div>}
-                    {
-                        visibleBlogs.length > 0 && <div className="group-todo">
-                            {visibleBlogs && visibleBlogs.map((item: BlogModel, index: string) => (
-                                <div className="box-todo p-3 mt-5 d-flex justify-content-between radius-5" key={`${index}`}>
-                                    <div>
-                                        <div className='font-weight-bold color-main font-size-25'>{item.title}</div>
-                                        <div className='font-size-20 color-dark'>{item.body}</div>
+                        {!visibleBlogs.length && <div className='mt-5'>Loading...</div>}
+                        {
+                            visibleBlogs.length > 0 && <div className="group-todo">
+                                {visibleBlogs && visibleBlogs.map((item: BlogModel, index: string) => (
+                                    <div className="box-todo p-3 mt-5 d-flex justify-content-between radius-5" key={`${index}`}>
+                                        <div>
+                                            <div className='font-weight-bold color-main font-size-25'>{item.title}</div>
+                                            <div className='font-size-20 color-dark'>{item.body}</div>
+                                        </div>
+                                        <div className='mt-4 mb-2 d-flex'>
+                                            <div><Link to={`/blogs/${item._id}`} className='bg-color-main text-center color-white pointer input-custom radius-5'>View</Link></div>
+                                            &nbsp;
+                                            &nbsp;
+                                            <div><a className='bg-color-main text-center color-white pointer input-custom radius-5' onClick={() => changeStatusComponent(item)}>Edit</a></div>
+                                        </div>
                                     </div>
-                                    <div className='mt-4 mb-2 d-flex'>
-                                        <div><Link to={`/blogs/${item._id}`} className='bg-color-main text-center color-white pointer input-custom radius-5'>View</Link></div>
-                                        &nbsp;
-                                        &nbsp;
-                                        <div><a className='bg-color-main text-center color-white pointer input-custom radius-5' onClick={() => changeStatusComponent(item)}>Edit</a></div>
-                                    </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
+                        }
+                        <div className="mt-5">
+                            {/* pagination */}
+                            <Pagination currentPage={currentPage ? currentPage : 1} onChangePage={onChangePage} totalPage={Number(totalPage) > 0 ? totalPage : 1} />
                         </div>
-                    }
-                    <div className="mt-5">
-                        {/* pagination */}
-                        <Pagination currentPage={currentPage ? currentPage : 1} onChangePage={onChangePage} totalPage={Number(totalPage) > 0 ? totalPage : 1} />
                     </div>
+                }
+                {
+                    showComponent.edit && <InputBlogs blogModel={blogEdit} categoryInput='Edit' onHandler={handleEditBlog} backStep={backStep} />
+                }
                 </div>
             }
             {
-                showComponent.edit && <InputBlogs blogModel={blogEdit} categoryInput='Edit' onHandler={handleEditBlog} backStep={backStep} />
+                permission === 'admin' && <div>
+                    <TableData
+                        columns={columns}
+                        data={data}
+                        defaultColumn={defaultColumn}
+                    />
+                </div>
             }
         </div>
+        
     );
 }
 

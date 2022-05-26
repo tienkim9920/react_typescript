@@ -14,11 +14,11 @@
 
 .header-link a:hover {
     color: #fff;
-    background-color: #dd8896;
+    background-color: #04764E;
 }
 
 .is-active {
-    background-color: #dd8896;
+    background-color: #04764E;
     color: #fff;
 }
 

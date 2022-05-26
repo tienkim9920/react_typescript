@@ -24,7 +24,7 @@
 .pagination li a.page-link:before,
 .pagination li a.page-link:after{
     content: '';
-    background-color: #dd8896;
+    background-color: #04764E;
     height: 75%;
     width: 75%;
     opacity: 0;
