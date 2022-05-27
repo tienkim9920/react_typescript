@@ -42,8 +42,12 @@ export const orderSlice = createSlice({
       const index = state.orders.findIndex((item: OrderModel) => {
         return item.id === Number(action.payload.id);
       })
-      state.orders[index].delivery = action.payload.delivery;
-      state.backupOrders[index].delivery = action.payload.delivery;
+      state.orders.splice(index, 1);
+
+      const indexBackup = state.backupOrders.findIndex((item: OrderModel) => {
+        return item.id === Number(action.payload.id);
+      })
+      state.backupOrders[indexBackup].delivery = action.payload.delivery;
     })
   },
 })

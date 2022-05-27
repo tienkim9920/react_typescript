@@ -28,7 +28,8 @@ function SignIn(props: any) {
         }
         AuthenticateLocal.setToken(res.data);
         dispatch(setPermission(AuthenticateLocal.getPermission()));
-        router.goBack();
+        router.replace('/');
+        // router.goBack();
     }
     
     return (
