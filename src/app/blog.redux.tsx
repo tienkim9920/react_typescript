@@ -6,12 +6,12 @@ import type { RootState } from './store';
 
 interface BlogSliceState {
   blogs: BlogModel[],
-  backup: BlogModel[]
+  backupBlogs: BlogModel[]
 }
 
 const initialState: BlogSliceState = {
   blogs: [],
-  backup: []
+  backupBlogs: []
 }
 
 export const getBlogs = createAsyncThunk('blogs/get', async () => {
@@ -47,7 +47,7 @@ export const blogSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getBlogs.fulfilled, (state: any, action: any) => {
       state.blogs = [...action.payload];
-      state.backup = [...action.payload];
+      state.backupBlogs = [...action.payload];
     });
 
     builder.addCase(patchBlogs.fulfilled, (state: any, action: any) => {

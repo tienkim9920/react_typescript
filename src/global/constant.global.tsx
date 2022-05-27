@@ -21,8 +21,9 @@ export const VALUE_OPTION = [
 
 export const LIMIT_PAGINATION = 3;
 
+export const HEADER_TEXT_TODO = 'Table Todo';
 export const HEADER_TODO_TABLE = [{
-    Header: "Table Todo",
+    Header: HEADER_TEXT_TODO,
     columns: [
         // {
         //     Header: "Id",
@@ -53,79 +54,60 @@ export const HEADER_TODO_TABLE = [{
     ]
 }];
 
+export const HEADER_TEXT_ORDER = 'Table Order';
 export const HEADER_ORDER_TABLE = [{
-    Header: "Table Order",
+    Header: HEADER_TEXT_ORDER,
     columns: [
         {
-            Header: 'Mã Đơn Hàng',
+            Header: 'Id',
             accessor: 'id',
         },
         {
-            Header: 'Địa chỉ',
+            Header: 'Address',
             accessor: 'address',
         },
         {
-            Header: 'Số điện thoại',
+            Header: 'Phone',
             accessor: 'phone',
         },
         {
-            Header: 'Tổng tiền',
+            Header: 'Total',
             accessor: 'total',
         },
         {
-            Header: 'Tình Trạng',
+            Header: 'Delivery',
             accessor: 'delivery',
         },
-        // {
-        //     Header: 'Thanh Toán',
-        //     accessor: 'pay',
-        // },
-        // {
-        //     Header: 'Ghi Chú',
-        //     accessor: 'note',
-        // },
-        // {
-        //     Header: 'Mã Khách Hàng',
-        //     accessor: 'userId',
-        // },
-        // {
-        //     Header: 'Mã Thanh Toán',
-        //     accessor: 'paymentId',
-        // },
-        // {
-        //     Header: 'Mã Giảm Giá',
-        //     accessor: 'couponId',
-        // },
-        // {
-        //     Header: 'createAt',
-        //     accessor: 'createAt',
-        // },
-        // {
-        //     Header: 'updateAt',
-        //     accessor: 'updateAt',
-        // },
+        {
+            Header: 'Action',
+            accessor: 'action',
+        },
     ]
 }]
 
-
-
-// export const BODY_TABLE = [
-//     {
-//         title: '1',
-//         username: '1',
-//         body: '1',
-//         phone: '1'
-//     },
-//     {
-//         title: '2',
-//         username: '2',
-//         body: '2',
-//         phone: '2'
-//     },
-//     {
-//         title: '3',
-//         username: '3',
-//         body: '3',
-//         phone: '3'
-//     },
-// ] as any[];
+export const FILTER_LABEL_DELIVERY = [
+    {
+        label: 'Tất cả',
+        value: 'all',
+    },
+    {
+        label: 'Đang xử lý',
+        value: '0',
+    },
+    {
+        label: 'Đã xác nhận',
+        value: '1',
+    },
+    {
+        label: 'Đang vận chuyển',
+        value: '2',
+    },
+    {
+        label: 'Hoàn thành',
+        value: '3',
+    },
+    {
+        label: 'Đã hủy',
+        value: '4',
+    },
+]

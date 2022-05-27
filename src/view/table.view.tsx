@@ -6,7 +6,7 @@ import InputData from "../component/input-data.component";
 import PaginationButton from "../component/pagination-button";
 import SearchColumn from "../component/search-column.component";
 import TableData from "../component/table-data.component";
-import { HEADER_TODO_TABLE } from "../global/constant.global";
+import { HEADER_TEXT_TODO, HEADER_TODO_TABLE } from "../global/constant.global";
 
 function Table() {
 
@@ -32,6 +32,8 @@ function Table() {
             columns={columns}
             data={data}
             defaultColumn={defaultColumn}
+            activeFilter={true}
+            headerText={HEADER_TEXT_TODO}
         />
     );
 }

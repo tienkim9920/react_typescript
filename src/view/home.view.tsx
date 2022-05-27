@@ -6,12 +6,13 @@ import { getBlogs, patchBlogs, searchBlogs } from '../app/blog.redux';
 import { FilterOption, SearchOption, ShowComponentHome } from '../pattern/home.pattern';
 import InputBlogs from '../component/input-blog.component';
 import { BlogsMapping } from '../mapping/blogs.mapping';
-import { HEADER_ORDER_TABLE, LIMIT_PAGINATION, VALUE_OPTION } from '../global/constant.global';
+import { FILTER_LABEL_DELIVERY, HEADER_ORDER_TABLE, HEADER_TEXT_ORDER, LIMIT_PAGINATION, VALUE_OPTION } from '../global/constant.global';
 import Pagination from '../component/pagination.component';
 import { AuthenticateLocal } from '../local/authenticate.local';
 import TableData from '../component/table-data.component';
 import SearchColumn from '../component/search-column.component';
-import { getOrders } from '../app/order.redux';
+import { filterDelivery, getOrders } from '../app/order.redux';
+import { OrderModel } from '../model/orders.model';
 // import { ErrorService } from '../service/error.service';
 
 function useQuery() {
@@ -21,7 +22,7 @@ function useQuery() {
 }
 
 function Home(props: any) {
-    const { blogs, backup } = useAppSelector(state => state.blog);
+    const { blogs, backupBlogs } = useAppSelector(state => state.blog);
     const { permission } = useAppSelector(state => state.permission)
     const dispatch = useAppDispatch();
     const [showComponent, setShowComponent] = useState<ShowComponentHome>({
@@ -40,7 +41,7 @@ function Home(props: any) {
     const currentPage = useQuery().get('page');
     const [totalPage, setTotalPage] = useState<Number>();
 
-    const [first, setFirst] = useState<boolean>(false);
+    const [firstBlogs, setFirstBlogs] = useState<boolean>(false);
     const [visibleBlogs, setVisibleBlogs] = useState<any>([]);
 
     const backStep = () => {
@@ -74,9 +75,9 @@ function Home(props: any) {
     }, [])
 
     useEffect(() => {
-        if (!blogs.length && !first) {
+        if (!blogs.length && !firstBlogs) {
             dispatch(getBlogs());
-            setFirst(true);
+            setFirstBlogs(true);
         }
         if (blogs.length > 0 || !blogs.length) {
             setTotalPage(Math.ceil(blogs.length / LIMIT_PAGINATION));
@@ -107,14 +108,15 @@ function Home(props: any) {
         const search = valueSearchOption.search || '';
         const option = valueSearchOption.option?.value;
         if (!search && (option === 'all' || !option)) {
-            dispatch(searchBlogs(backup));
+            dispatch(searchBlogs(backupBlogs));
             return;
         }
-        const filterBlogs = backup.filter((item: BlogModel) => {
+        const filterBlogs = backupBlogs.filter((item: BlogModel) => {
             return option === 'all' || !option ?
                 item.title?.toString().toUpperCase().indexOf(search.toUpperCase()) !== -1 :
                 item.title?.toString().toUpperCase().indexOf(search.toUpperCase()) !== -1 && item.body === option
         });
+        
         dispatch(searchBlogs(filterBlogs));
         router.push(`/?page=1`);
     }
@@ -127,14 +129,15 @@ function Home(props: any) {
         setVisibleBlogs(sliceBlogs);
     }
 
-    const { orders } = useAppSelector(state => state.order);
+    const { orders, backupOrders } = useAppSelector(state => state.order);
+    const [firstOrders, setFirstOrders] = useState<boolean>(false);
 
     const columns = useMemo(() => HEADER_ORDER_TABLE, []);
     const data = useMemo(() => {
-        if (!orders.length) {
+        if (!orders.length && !firstOrders) {
             dispatch(getOrders());
+            setFirstOrders(true);
         }
-        console.log(orders);
         return orders;
     }, [orders]);
 
@@ -143,6 +146,17 @@ function Home(props: any) {
             Filter: SearchColumn
         }
     }, [])
+
+    const eventSelectBox = (event: any) => {
+        if (event === 'all'){
+            dispatch(filterDelivery(backupOrders));
+            return;
+        }
+        const resultDelivery = backupOrders.filter((item: OrderModel) => {
+            return item.delivery === event
+        })
+        dispatch(filterDelivery(resultDelivery));
+    }
 
     return (
         <div>
@@ -212,6 +226,11 @@ function Home(props: any) {
                         columns={columns}
                         data={data}
                         defaultColumn={defaultColumn}
+                        activeFilter={false}
+                        headerText={HEADER_TEXT_ORDER}
+                        filterSelectBox={true}
+                        labelSelectBox={FILTER_LABEL_DELIVERY}
+                        eventSelectBox={eventSelectBox}
                     />
                 </div>
             }

@@ -35,7 +35,11 @@ a:hover {
 }
 
 .bg-color-gray-fade {
-    background-color: #f3f3f3;
+    background-color: #f3f3f3 !important;
+}
+
+.bg-color-danger {
+    background-color: #ce4f4f !important;
 }
 
 .p-2 {
@@ -142,6 +146,10 @@ a:hover {
     font-size: 20px;
 }
 
+.font-size-18 {
+    font-size: 18px;
+}
+
 .font-size-16 {
     font-size: 16px;
 }
@@ -174,7 +182,7 @@ a:hover {
     background-color: #fff;
     border: none;
     outline: none;
-    padding: .75rem 1.5rem;
+    padding: .6rem 1.33rem;
 }
 
 .input-custom:disabled,

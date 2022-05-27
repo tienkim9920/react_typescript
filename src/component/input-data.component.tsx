@@ -15,7 +15,7 @@ function InputData(props: any) {
                 className="width-225 input-custom radius-5 font-size-14"
                 type="text"
                 placeholder={`${textHolder}`}
-                value={inputText}
+                value={inputText || ''}
                 onChange={(e) => {
                     setInputText(e.target.value);
                     onEventChange(e.target.value);

@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useHistory } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { setPermission } from '../app/permission.redux';
 import Logo from '../assets/logo_web.png';
@@ -8,12 +8,19 @@ import { AuthenticateLocal } from '../local/authenticate.local';
 function Header(props: any) {
     const { permission } = useAppSelector(state => state.permission);
     const dispatch = useAppDispatch();
+    const router = useHistory();
 
     useLayoutEffect(() => {
         if (AuthenticateLocal.getPermission()){
             dispatch(setPermission(AuthenticateLocal.getPermission()));
         }
     }, [])
+
+    const handleLogout = () => {
+        dispatch(setPermission(''));
+        localStorage.clear();
+        router.push('/login');
+    }
 
     return (
         <div className="section-header">
@@ -33,11 +40,13 @@ function Header(props: any) {
                         <div className="header-link ml-1"><NavLink activeClassName="is-active" to="/add">Add Post</NavLink></div>
                         <div className="header-link ml-1"><NavLink activeClassName="is-active" to="/list">Todo List</NavLink></div>
                         <div className="header-link ml-1"><NavLink activeClassName="is-active" to="/table">Table List</NavLink></div>
+                        <div className="header-link ml-1 pointer" onClick={handleLogout}>Log out</div>
                     </div>
                 }
                 {
                     permission === 'admin' && <div className="d-flex mt-3">
-                        <div className="header-link"><NavLink activeClassName="is-active" to="/" exact={true}>Đơn Hàng</NavLink></div>
+                        <div className="header-link"><NavLink activeClassName="is-active" to="/" exact={true}>Manage</NavLink></div>
+                        <div className="header-link ml-1 pointer" onClick={handleLogout}>Log out</div>
                     </div>
                 }
             </div>
