@@ -3,7 +3,7 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import { BlogModel } from '../model/blogs.model';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { getBlogs, patchBlogs, searchBlogs } from '../app/blog.redux';
-import { FilterOption, SearchOption, ShowComponentHome } from '../pattern/home.pattern';
+import { FilterOption, SearchOption, ShowComponentHome, UpdateDelivery } from '../pattern/home.pattern';
 import InputBlogs from '../component/input-blog.component';
 import { BlogsMapping } from '../mapping/blogs.mapping';
 import { FILTER_LABEL_DELIVERY, HEADER_ORDER_TABLE, HEADER_TEXT_ORDER, LIMIT_PAGINATION, VALUE_OPTION } from '../global/constant.global';
@@ -11,7 +11,7 @@ import Pagination from '../component/pagination.component';
 import { AuthenticateLocal } from '../local/authenticate.local';
 import TableData from '../component/table-data.component';
 import SearchColumn from '../component/search-column.component';
-import { filterDelivery, getOrders } from '../app/order.redux';
+import { filterDelivery, getOrders, updateDelivery } from '../app/order.redux';
 import { OrderModel } from '../model/orders.model';
 // import { ErrorService } from '../service/error.service';
 
@@ -131,6 +131,8 @@ function Home(props: any) {
 
     const { orders, backupOrders } = useAppSelector(state => state.order);
     const [firstOrders, setFirstOrders] = useState<boolean>(false);
+    const [statusFilterOrders, setStatusFilterOrders] = useState<boolean>(false);
+    const [currentItemFilterOrders, setCurrentItemFilterOrders] = useState<String>('');
 
     const columns = useMemo(() => HEADER_ORDER_TABLE, []);
     const data = useMemo(() => {
@@ -147,15 +149,25 @@ function Home(props: any) {
         }
     }, [])
 
-    const eventSelectBox = (event: any) => {
-        if (event === 'all'){
+    const eventSelectBox = (event: FilterOption) => {
+        handleStatusFilterOrders(event.label || '');
+        if (event.value === 'all'){
             dispatch(filterDelivery(backupOrders));
             return;
         }
         const resultDelivery = backupOrders.filter((item: OrderModel) => {
-            return item.delivery === event
+            return item.delivery === event.value
         })
         dispatch(filterDelivery(resultDelivery));
+    }
+
+    const actionEventDelivery = (event: UpdateDelivery) => {
+        dispatch(updateDelivery(event));
+    }
+
+    function handleStatusFilterOrders(event: String) {
+        setStatusFilterOrders(!statusFilterOrders);
+        setCurrentItemFilterOrders(event);
     }
 
     return (
@@ -228,9 +240,13 @@ function Home(props: any) {
                         defaultColumn={defaultColumn}
                         activeFilter={false}
                         headerText={HEADER_TEXT_ORDER}
+                        actionEvent={actionEventDelivery}
                         filterSelectBox={true}
                         labelSelectBox={FILTER_LABEL_DELIVERY}
                         eventSelectBox={eventSelectBox}
+                        statusFilterOrders={statusFilterOrders}
+                        setStatusFilterOrders={(e: boolean) => setStatusFilterOrders(e)}
+                        currentItem={currentItemFilterOrders}
                     />
                 </div>
             }

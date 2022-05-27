@@ -10,5 +10,10 @@ export class SearchOption {
 
 export interface FilterOption {
     label?: String,
-    value: String
+    value?: String
+}
+
+export class UpdateDelivery {
+    id?: String;
+    delivery?: String;
 }

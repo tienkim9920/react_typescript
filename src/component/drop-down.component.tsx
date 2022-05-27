@@ -2,10 +2,10 @@ import React from "react";
 import { FilterOption } from "../pattern/home.pattern";
 
 function DropDownMenu(props: any) {
-    const { statusActive, selectList, handleChooseOption, currentItem } = props;
+    const { statusActive, setStatusFilter, selectList, handleChooseOption, currentItem } = props;
 
     return (
-        <div>
+        <div className="mt-5 group-option" onClick={() => setStatusFilter(!statusActive)}>
             <div className="width-225 input-custom radius-5 color-dark pointer">
                 {!currentItem
                 ? "Choose Filter"

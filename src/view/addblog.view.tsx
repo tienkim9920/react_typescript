@@ -13,6 +13,7 @@ function AddBlog(props: any) {
     const handleAddBlogs = (blog: BlogModel) => {
         const postAddBlogs = async () => {
             const res = await BlogService.AddBlogs(BlogsMapping.Map2Service(blog));
+            // console.log(res.response); // get error return from server
             if (res.status === 200) {
                 dispatch(addBlogs(res.data));
             }

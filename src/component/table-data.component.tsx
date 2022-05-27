@@ -1,11 +1,26 @@
 import React, { useState } from 'react';
 import { useFilters, useGlobalFilter, usePagination, useTable } from 'react-table';
+import { UpdateDelivery } from '../pattern/home.pattern';
+import DropDownMenu from './drop-down.component';
 import InputData from './input-data.component';
 import PaginationButton from './pagination-button';
 
 function TableData(props: any) {
 
-    const { columns, data, defaultColumn, activeFilter, headerText, filterSelectBox, labelSelectBox, eventSelectBox } = props;
+    const { 
+        columns, 
+        data, 
+        defaultColumn, 
+        activeFilter, 
+        headerText,
+        actionEvent,
+        filterSelectBox, 
+        labelSelectBox, 
+        eventSelectBox, 
+        statusFilterOrders,
+        setStatusFilterOrders,
+        currentItem
+    } = props;
 
     const {
         getTableProps,
@@ -30,14 +45,19 @@ function TableData(props: any) {
 
     return (
         <div className="mt-5 mb-5">
-            <InputData data={globalFilter} setData={setGlobalFilter} textHolder="Enter Search Global" />
-            {
-                filterSelectBox && <select onChange={(e) => eventSelectBox(e.target.value)}>
-                    { labelSelectBox.map((item: any, index: any) => (
-                        <option key={index} value={item.value}>{item.label}</option>
-                    )) }
-                </select>
-            }
+            <div className='d-flex justify-content-between'>
+                <InputData data={globalFilter} setData={setGlobalFilter} textHolder="Enter Search Global" />
+                {
+                    filterSelectBox && 
+                        <DropDownMenu 
+                            statusActive={statusFilterOrders} 
+                            setStatusFilter={setStatusFilterOrders}
+                            selectList={labelSelectBox}
+                            handleChooseOption={eventSelectBox}
+                            currentItem={currentItem}
+                            />
+                }
+            </div>
             <table {...getTableProps()} className="table-todo mt-3 bg-white radius-5 w-100">
                 <thead className="bg-color-main">
                     {headerGroups.map((headerGroup: any) => (
@@ -78,12 +98,24 @@ function TableData(props: any) {
                                             const total = cell.render('Cell').props.cell.row.values.total
                                             return new Intl.NumberFormat('vi-VN', { style: 'decimal', currency: 'VND' }).format(total) + ' VNĐ'
                                         case 'action':
+                                            const updateDelivery: UpdateDelivery = new UpdateDelivery();
+                                            updateDelivery.id = cell.render('Cell').props.cell.row.values.id;
+                                            updateDelivery.delivery = cell.render('Cell').props.cell.row.values.delivery;
+                                            console.log(updateDelivery.delivery)
                                             return (
-                                                <div className='d-flex'>
-                                                    <div className='bg-color-main text-center color-white pointer input-custom radius-5'>Xác nhận</div>
-                                                    &nbsp;
-                                                    <div className='bg-color-danger text-center color-white pointer input-custom radius-5'>Hủy</div>
+                                                <div>
+                                                    {
+                                                        updateDelivery.delivery === '3' || updateDelivery.delivery === '4' ? <div>Đã hoàn tất</div> : <div className='d-flex'>
+                                                        <div onClick={() => actionEvent(updateDelivery)} className='bg-color-main text-center color-white pointer input-custom radius-5'>Accept</div>
+                                                            &nbsp;
+                                                            <div onClick={() => {
+                                                                updateDelivery.delivery = '4';
+                                                                actionEvent(updateDelivery);
+                                                            }} className='bg-color-danger text-center color-white pointer input-custom radius-5'>Cancel</div>
+                                                        </div>
+                                                    }
                                                 </div>
+
                                             )
                                         default: 
                                             return cell.render('Cell');
