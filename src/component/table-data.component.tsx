@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useFilters, useGlobalFilter, usePagination, useTable } from 'react-table';
 import { UpdateDelivery } from '../pattern/home.pattern';
 import DropDownMenu from './drop-down.component';
@@ -101,12 +102,14 @@ function TableData(props: any) {
                                             const updateDelivery: UpdateDelivery = new UpdateDelivery();
                                             updateDelivery.id = cell.render('Cell').props.cell.row.values.id;
                                             updateDelivery.delivery = cell.render('Cell').props.cell.row.values.delivery;
-                                            console.log(updateDelivery.delivery)
                                             return (
                                                 <div>
                                                     {
-                                                        updateDelivery.delivery === '3' || updateDelivery.delivery === '4' ? <div>Đã hoàn tất</div> : <div className='d-flex'>
-                                                        <div onClick={() => actionEvent(updateDelivery)} className='bg-color-main text-center color-white pointer input-custom radius-5'>Accept</div>
+                                                        updateDelivery.delivery === '3' || updateDelivery.delivery === '4' ? <Link className='color-white' to={`/detail/${updateDelivery.id}`}><div className='bg-color-primary text-center pointer input-custom radius-5'>View</div></Link> : 
+                                                        <div className='d-flex'>
+                                                            <div onClick={() => actionEvent(updateDelivery)} className='bg-color-main text-center color-white pointer input-custom radius-5'>Accept</div>
+                                                            &nbsp;
+                                                            <Link className='color-white' to={`/detail/${updateDelivery.id}`}><div className='bg-color-primary text-center pointer input-custom radius-5'>View</div></Link>
                                                             &nbsp;
                                                             <div onClick={() => {
                                                                 updateDelivery.delivery = '4';

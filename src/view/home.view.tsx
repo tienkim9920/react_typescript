@@ -212,7 +212,7 @@ function Home(props: any) {
                                             <div className='font-size-20 color-dark'>{item.body}</div>
                                         </div>
                                         <div className='mt-4 mb-2 d-flex'>
-                                            <div><Link to={`/blogs/${item._id}`} className='bg-color-main text-center color-white pointer input-custom radius-5'>View</Link></div>
+                                            <div><Link to={`/detail/${item._id}`} className='bg-color-main text-center color-white pointer input-custom radius-5'>View</Link></div>
                                             &nbsp;
                                             &nbsp;
                                             <div><a className='bg-color-main text-center color-white pointer input-custom radius-5' onClick={() => changeStatusComponent(item)}>Edit</a></div>

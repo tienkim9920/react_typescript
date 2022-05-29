@@ -25,7 +25,7 @@ function Header(props: any) {
     return (
         <div className="section-header">
             <div className="layout-header container d-flex justify-content-between p-3">
-                <Link to="/?page=1" className="group-header-logo d-flex">
+                <Link to="/" className="group-header-logo d-flex">
                     <img src={Logo} width="45px" height="55px" alt="" />
                     <div className="mt-1 ml-1 h3-header-logo color-main">Ombee</div>
                 </Link>

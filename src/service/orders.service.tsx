@@ -10,6 +10,11 @@ export const OrderService = {
         return httpAdmin.patch(`/order/${id}?delivery=${delivery}`)
             .then(res => res)
             .catch(err => err);
+    },
+    DetailOrder: (orderId: String) => {
+        return httpAdmin.get(`/order-detail/${orderId}`)
+            .then(res => res)
+            .catch(err => err);
     }
 }
 

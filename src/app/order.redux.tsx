@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { OrderModel } from '../model/orders.model';
 import { UpdateDelivery } from '../pattern/home.pattern';
 import { OrderService } from '../service/orders.service';
@@ -39,6 +39,7 @@ export const orderSlice = createSlice({
     });
 
     builder.addCase(updateDelivery.fulfilled, (state: any, action: any) => {
+      // Lỗi chỗ này vì nó cắt đi luôn
       const index = state.orders.findIndex((item: OrderModel) => {
         return item.id === Number(action.payload.id);
       })
@@ -51,6 +52,16 @@ export const orderSlice = createSlice({
     })
   },
 })
+
+export const getDetailOrder = (id: String) => createSelector(
+  (state: RootState) => state.order.orders,
+  (items) => {
+    const index = items.findIndex((element: OrderModel) => {
+      return element.id?.toString() === id;
+    })
+    return items[index];
+  }
+);
 
 export const { filterDelivery } = orderSlice.actions;
 

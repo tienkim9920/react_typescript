@@ -42,6 +42,10 @@ a:hover {
     background-color: #ce4f4f !important;
 }
 
+.bg-color-primary {
+    background-color: #4f73ce !important;
+}
+
 .p-2 {
     padding: 2rem;
 }
@@ -124,6 +128,14 @@ a:hover {
 
 .font-weight-bold {
     font-weight: bold;
+}
+
+.font-size-50 {
+    font-size: 50px;
+}
+
+.font-size-45 {
+    font-size: 45px;
 }
 
 .font-size-40 {
