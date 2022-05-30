@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useMemo, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { deleteBlogs } from '../app/blog.redux';
@@ -7,8 +7,9 @@ import { BlogService } from '../service/blogs.service';
 import { OrderModel } from '../model/orders.model';
 import { AuthenticateLocal } from '../local/authenticate.local';
 import { OrderService } from '../service/orders.service';
-import { getDetailOrder } from '../app/order.redux';
+import { getDetailOrder, getOrderDetail } from '../app/order.redux';
 import { OrderDetailModel } from '../model/orders-detail.model';
+import TableData from '../component/table-data.component';
 
 function Detail(props: any) {
 
@@ -19,7 +20,7 @@ function Detail(props: any) {
     const { blogs } = useAppSelector(state => state.blog);
 
     const order = useAppSelector(getDetailOrder(id));
-    const [orderDetail, setOrderDetail] = useState<OrderDetailModel>() || null;
+    const { orderDetails } = useAppSelector(state => state.order)
 
     const [permission, setPermission] = useState<String>(AuthenticateLocal.getPermission());
     const dispatch = useAppDispatch();
@@ -38,16 +39,15 @@ function Detail(props: any) {
             }
     
             fetchData();
-        }else if (permission === 'admin') {
-            const fetchData = async () => {
-                const res = (await OrderService.DetailOrder(id)).data;
-                setOrderDetail(res);
-            }
-
-            fetchData();
-        }
-        
+        } 
     }, [])
+
+    const data = useMemo(() => {
+        if (!orderDetails.length){
+            dispatch(getOrderDetail(id));
+        }
+        return orderDetails;
+    }, [orderDetails])
 
     const handleDelete = () => {
         dispatch(deleteBlogs(id));
@@ -82,6 +82,13 @@ function Detail(props: any) {
                     <div className='font-size-20 mt-2'>Địa chỉ: { order.address }</div>
                     <div className='font-size-20 mt-2'>Số điện thoại: { order.phone }</div>
                 </div>
+            }
+            {
+                // (permission === 'admin' && order) &&
+                // <TableData 
+                //     columns={columns}
+                //     data={data}
+                //     defaultColumn={defaultColumn} />
             }
         </div>
     );

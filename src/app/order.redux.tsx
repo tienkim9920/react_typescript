@@ -1,4 +1,6 @@
 import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IOrderDetail } from '../interface/orders-detail.interface';
+import { OrderDetailModel } from '../model/orders-detail.model';
 import { OrderModel } from '../model/orders.model';
 import { UpdateDelivery } from '../pattern/home.pattern';
 import { OrderService } from '../service/orders.service';
@@ -7,12 +9,20 @@ import type { RootState } from './store';
 interface OrderSliceState {
   orders: OrderModel[],
   backupOrders: OrderModel[],
+  filter: String,
+  orderDetails: OrderDetailModel[]
 }
 
 const initialState: OrderSliceState = {
   orders: [],
   backupOrders: [],
+  filter: 'all',
+  orderDetails: []
 }
+
+export const getOrderDetail = createAsyncThunk('orders-detail/get', async (orderId: String) => {
+  return (await OrderService.DetailOrder(orderId)).data;
+})
 
 export const getOrders = createAsyncThunk('orders/get', async () => {
   return (await OrderService.GetOrder()).data;
@@ -30,6 +40,9 @@ export const orderSlice = createSlice({
   reducers: {
     filterDelivery: (state, action: PayloadAction<any>) => {
       state.orders = [...action.payload];
+    },
+    filterStatus: (state, action: PayloadAction<any>) => {
+      state.filter = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -39,16 +52,23 @@ export const orderSlice = createSlice({
     });
 
     builder.addCase(updateDelivery.fulfilled, (state: any, action: any) => {
-      // Lỗi chỗ này vì nó cắt đi luôn
       const index = state.orders.findIndex((item: OrderModel) => {
         return item.id === Number(action.payload.id);
       })
-      state.orders.splice(index, 1);
+      if (state.filter !== 'all'){
+        state.orders.splice(index, 1);
+      }else {
+        state.orders[index].delivery = action.payload.delivery;
+      }
 
       const indexBackup = state.backupOrders.findIndex((item: OrderModel) => {
         return item.id === Number(action.payload.id);
       })
       state.backupOrders[indexBackup].delivery = action.payload.delivery;
+    });
+
+    builder.addCase(getOrderDetail.fulfilled, (state: any, action: any) => {
+      state.orderDetails = [...action.payload];
     })
   },
 })
@@ -63,9 +83,8 @@ export const getDetailOrder = (id: String) => createSelector(
   }
 );
 
-export const { filterDelivery } = orderSlice.actions;
+export const { filterDelivery, filterStatus } = orderSlice.actions;
 
 export const selectOrder = (state: RootState) => state.order;
 
 export default orderSlice.reducer;
-

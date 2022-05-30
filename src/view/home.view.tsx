@@ -11,7 +11,7 @@ import Pagination from '../component/pagination.component';
 import { AuthenticateLocal } from '../local/authenticate.local';
 import TableData from '../component/table-data.component';
 import SearchColumn from '../component/search-column.component';
-import { filterDelivery, getOrders, updateDelivery } from '../app/order.redux';
+import { filterDelivery, filterStatus, getOrders, updateDelivery } from '../app/order.redux';
 import { OrderModel } from '../model/orders.model';
 // import { ErrorService } from '../service/error.service';
 
@@ -151,6 +151,7 @@ function Home(props: any) {
 
     const eventSelectBox = (event: FilterOption) => {
         handleStatusFilterOrders(event.label || '');
+        dispatch(filterStatus(event.value));
         if (event.value === 'all'){
             dispatch(filterDelivery(backupOrders));
             return;
