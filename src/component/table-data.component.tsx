@@ -12,7 +12,8 @@ function TableData(props: any) {
         columns, 
         data, 
         defaultColumn, 
-        activeFilter, 
+        activeFilter,
+        activeFilterGlobal,
         headerText,
         actionEvent,
         filterSelectBox, 
@@ -45,9 +46,11 @@ function TableData(props: any) {
     const { globalFilter, pageIndex, pageSize } = state;
 
     return (
-        <div className="mt-5 mb-5">
+        <div>
             <div className='d-flex justify-content-between'>
-                <InputData data={globalFilter} setData={setGlobalFilter} textHolder="Enter Search Global" />
+                {
+                    activeFilterGlobal && <InputData data={globalFilter} setData={setGlobalFilter} textHolder="Enter Search Global" />
+                }
                 {
                     filterSelectBox && 
                         <DropDownMenu 
@@ -120,6 +123,9 @@ function TableData(props: any) {
                                                 </div>
 
                                             )
+                                        case 'imageProduct':
+                                            const image = cell.render('Cell').props.cell.row.values.imageProduct;
+                                            return <img src={image} alt="" width='100px' height='100px' />
                                         default: 
                                             return cell.render('Cell');
                                     }

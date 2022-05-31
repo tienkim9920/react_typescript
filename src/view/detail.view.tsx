@@ -4,12 +4,11 @@ import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { deleteBlogs } from '../app/blog.redux';
 import { BlogModel } from '../model/blogs.model';
 import { BlogService } from '../service/blogs.service';
-import { OrderModel } from '../model/orders.model';
 import { AuthenticateLocal } from '../local/authenticate.local';
-import { OrderService } from '../service/orders.service';
 import { getDetailOrder, getOrderDetail } from '../app/order.redux';
-import { OrderDetailModel } from '../model/orders-detail.model';
 import TableData from '../component/table-data.component';
+import { HEADER_ORDER_DETAIL_TABLE, HEADER_TEXT_ORDER_DETAIL } from '../global/constant.global';
+import SearchColumn from '../component/search-column.component';
 
 function Detail(props: any) {
 
@@ -21,6 +20,7 @@ function Detail(props: any) {
 
     const order = useAppSelector(getDetailOrder(id));
     const { orderDetails } = useAppSelector(state => state.order)
+    const [firstOrderDetail, setFirstOrderDetail] = useState<boolean>(false);
 
     const [permission, setPermission] = useState<String>(AuthenticateLocal.getPermission());
     const dispatch = useAppDispatch();
@@ -43,11 +43,22 @@ function Detail(props: any) {
     }, [])
 
     const data = useMemo(() => {
-        if (!orderDetails.length){
+        if (!firstOrderDetail){
             dispatch(getOrderDetail(id));
+            setTimeout(() => {
+                setFirstOrderDetail(true);
+            }, 500)
         }
         return orderDetails;
-    }, [orderDetails])
+    }, [orderDetails, id])
+
+    const columns = useMemo(() => HEADER_ORDER_DETAIL_TABLE, [])    
+
+    const defaultColumn = useMemo(() => {
+        return {
+            Filter: SearchColumn
+        }
+    }, [])
 
     const handleDelete = () => {
         dispatch(deleteBlogs(id));
@@ -81,14 +92,19 @@ function Detail(props: any) {
                     <div className='font-size-20 mt-2'>Tên người đặt : 123123</div>
                     <div className='font-size-20 mt-2'>Địa chỉ: { order.address }</div>
                     <div className='font-size-20 mt-2'>Số điện thoại: { order.phone }</div>
+                    <div className='font-size-20 mt-2'>Tổng tiền: { new Intl.NumberFormat('vi-VN', { style: 'decimal', currency: 'VND' }).format(Number(order.total)) + ' VNĐ' }</div>
                 </div>
             }
             {
-                // (permission === 'admin' && order) &&
-                // <TableData 
-                //     columns={columns}
-                //     data={data}
-                //     defaultColumn={defaultColumn} />
+                !firstOrderDetail && <div className='mt-5 text-center'>Loading...</div>
+            }
+            {
+                (permission === 'admin' && order && firstOrderDetail) &&
+                <TableData 
+                    columns={columns}
+                    data={data}
+                    defaultColumn={defaultColumn}
+                    headerText={HEADER_TEXT_ORDER_DETAIL} />
             }
         </div>
     );

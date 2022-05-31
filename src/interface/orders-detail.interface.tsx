@@ -4,5 +4,5 @@ export interface IOrderDetail {
     count?: String,
     nameProduct?: String,
     priceProduct?: String,
-    imageProduct?: String
+    imageProduct?: String,
 }

@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IOrderDetail } from '../interface/orders-detail.interface';
+import { OrderDetailMapping } from '../mapping/orders-detail.mapping';
 import { OrderDetailModel } from '../model/orders-detail.model';
 import { OrderModel } from '../model/orders.model';
 import { UpdateDelivery } from '../pattern/home.pattern';
+import { OrderDetailPattern } from '../pattern/order-detail.pattern';
 import { OrderService } from '../service/orders.service';
 import type { RootState } from './store';
 
@@ -10,14 +12,16 @@ interface OrderSliceState {
   orders: OrderModel[],
   backupOrders: OrderModel[],
   filter: String,
-  orderDetails: OrderDetailModel[]
+  orderDetails: OrderDetailPattern[],
+  storeOrderDetails: OrderDetailPattern[],
 }
 
 const initialState: OrderSliceState = {
   orders: [],
   backupOrders: [],
   filter: 'all',
-  orderDetails: []
+  orderDetails: [],
+  storeOrderDetails: []
 }
 
 export const getOrderDetail = createAsyncThunk('orders-detail/get', async (orderId: String) => {
@@ -43,7 +47,7 @@ export const orderSlice = createSlice({
     },
     filterStatus: (state, action: PayloadAction<any>) => {
       state.filter = action.payload;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getOrders.fulfilled, (state: any, action: any) => {
@@ -68,7 +72,10 @@ export const orderSlice = createSlice({
     });
 
     builder.addCase(getOrderDetail.fulfilled, (state: any, action: any) => {
-      state.orderDetails = [...action.payload];
+      // because data get from api is OrderDetail so we must convert to key value match with table
+      state.orderDetails = action.payload.map((item: OrderDetailModel) => {
+        return OrderDetailMapping.ConvertFromJSONtoData(item);
+      });
     })
   },
 })

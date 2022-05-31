@@ -111,3 +111,35 @@ export const FILTER_LABEL_DELIVERY = [
         value: '4',
     },
 ]
+
+
+export const HEADER_TEXT_ORDER_DETAIL = 'Table Order Detail';
+export const HEADER_ORDER_DETAIL_TABLE = [{
+    Header: HEADER_TEXT_ORDER_DETAIL,
+    columns: [
+        {
+            Header: 'Id',
+            accessor: 'id',
+        },
+        {
+            Header: 'Name',
+            accessor: 'nameProduct',
+        },
+        {
+            Header: 'Image',
+            accessor: 'imageProduct',
+        },
+        {
+            Header: 'Price',
+            accessor: 'priceProduct',
+        },
+        {
+            Header: 'Size',
+            accessor: 'size',
+        },
+        {
+            Header: 'Count',
+            accessor: 'count',
+        }
+    ]
+}]

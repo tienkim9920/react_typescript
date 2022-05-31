@@ -136,7 +136,7 @@ function Home(props: any) {
 
     const columns = useMemo(() => HEADER_ORDER_TABLE, []);
     const data = useMemo(() => {
-        if (!orders.length && !firstOrders) {
+        if (!firstOrders) {
             dispatch(getOrders());
             setFirstOrders(true);
         }
@@ -240,6 +240,7 @@ function Home(props: any) {
                         data={data}
                         defaultColumn={defaultColumn}
                         activeFilter={false}
+                        activeFilterGlobal={true}
                         headerText={HEADER_TEXT_ORDER}
                         actionEvent={actionEventDelivery}
                         filterSelectBox={true}

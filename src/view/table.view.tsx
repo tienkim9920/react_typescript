@@ -33,6 +33,7 @@ function Table() {
             data={data}
             defaultColumn={defaultColumn}
             activeFilter={true}
+            activeFilterGlobal={true}
             headerText={HEADER_TEXT_TODO}
         />
     );
